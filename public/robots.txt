@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+Disallow: /images/
+Disallow: /files/
+
+Disallow: /*.webp$
+Disallow: /*.png$
+Disallow: /*.jpg$
+Disallow: /*.pdf$
+Disallow: /*.xlsx$

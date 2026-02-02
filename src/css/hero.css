@@ -1,0 +1,58 @@
+.hero-section {
+  min-height: 60vh;
+  padding-top: 5%;
+  background:  url("/images/bg.webp");
+  background-size: contain;
+  background-position: right bottom;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: #ffffff;
+  clip-path: polygon(0 0, 53% 0, 45% 101%, 0 100%);
+  z-index: 1;
+  filter: drop-shadow(5px 0 15px rgba(0, 0, 0, 0.1));
+
+
+}
+
+.hero-logo {
+  width: 300px;
+  height: auto;
+  margin: 0 auto 20px;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.05));
+
+
+}
+
+.hero-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+  width: 48%;
+}
+
+.hero-title {
+  font-size: 2.2rem;
+  text-align: center;
+  line-height: 1.2;
+  width: 100%;
+  padding: 0 5vw;
+  font-weight: 700;
+
+  background: linear-gradient(135deg, #34445E 0%, #00135e 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}

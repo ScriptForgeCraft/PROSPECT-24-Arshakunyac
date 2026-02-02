@@ -1,0 +1,305 @@
+/* ═══════════════════════════════════════════
+   SETTINGS PANEL — Polished CSS
+   ═══════════════════════════════════════════ */
+
+:root {
+  --base-font: clamp(15px, 1.1vw, 18px);
+  --font-scale: 1;
+  font-size: calc(var(--base-font) * var(--font-scale));
+
+  /* Light palette */
+  --panel-bg: #ffffff;
+  --panel-border: #e2e8f0;
+  --panel-shadow: rgba(15, 23, 42, 0.12);
+  --btn-bg: #f1f5f9;
+  --btn-border: #dde4ee;
+  --btn-text: #1e293b;
+  --btn-hover-bg: #e2e8f0;
+  --label-color: #94a3b8;
+  --close-color: #94a3b8;
+  --close-hover: #64748b;
+
+  /* Accent */
+  --accent: #161769;
+  --accent-glow: rgba(22, 23, 105, 0.35);
+  --toggle-bg: #141A37;
+  --toggle-shadow: rgba(37, 100, 235, 0.45);
+  --toggle-hover-shadow: rgba(37, 100, 235, 0.65);
+  --chevron-color: #ffffff;
+}
+
+body.dark-mode {
+  transition: all .3s ease;
+  --panel-bg: #1e293b;
+  --panel-border: #334155;
+  --panel-shadow: rgba(0, 0, 0, 0.3);
+  --btn-bg: #2d3a50;
+  --btn-border: #3d4f6a;
+  --btn-text: #e8e0da;
+  --btn-hover-bg: #374e6a;
+  --label-color: #64748b;
+  --close-color: #64748b;
+  --close-hover: #94a3b8;
+}
+
+/* ─── Root ─── */
+body.dark-mode {
+  background-color: #0f172a;
+  color: #f9fafb;
+}
+
+/* ═══════════════════════════════════════════
+   SETTINGS CONTAINER
+   ═══════════════════════════════════════════ */
+.settings {
+  position: fixed;
+  bottom: 4.5vh;
+  right: -10px;
+  z-index: 1000;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+/* ═══════════════════════════════════════════
+   TOGGLE BUTTON (the tab on the edge)
+   ═══════════════════════════════════════════ */
+.settings__toggle {
+  position: relative;
+  width: 38px;
+  height: 56px;
+  padding: 0;
+  margin: 0;
+  border: none;
+  border-radius: 10px 0 0 10px;
+  background: var(--toggle-bg);
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: -3px 4px 14px var(--toggle-shadow);
+  transition: background 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.2s ease;
+  opacity: 0.92;
+  outline: none;
+}
+
+.settings__toggle:hover {
+  background: #1e2a5e;
+  opacity: 1;
+  box-shadow: -4px 6px 20px var(--toggle-hover-shadow);
+  transform: translateX(-2px);
+}
+
+.settings__toggle:active {
+  transform: translateX(0px);
+  box-shadow: -2px 3px 10px var(--toggle-shadow);
+}
+
+/* ─── Subtle top/bottom edge highlight ─── */
+.settings__toggle::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(180deg,
+      rgba(255, 255, 255, 0.08) 0%,
+      transparent 40%,
+      transparent 60%,
+      rgba(255, 255, 255, 0.04) 100%);
+  pointer-events: none;
+}
+
+/* ═══════════════════════════════════════════
+   CHEVRON SVG
+   ═══════════════════════════════════════════ */
+.settings__toggle svg {
+  width: 20px;
+  height: 20px;
+  display: block;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+}
+
+/* Rotate chevron when panel is open */
+.settings.is-open .settings__toggle svg {
+  transform: rotate(180deg);
+}
+
+/* Override SVG fill to use our accent color */
+.settings__toggle svg path {
+  fill: var(--chevron-color);
+}
+
+/* ═══════════════════════════════════════════
+   INNER PANEL
+   ═══════════════════════════════════════════ */
+.settings__inner {
+  position: absolute;
+  bottom: 0;
+  right: 47px;
+  transform: translateX(calc(100% + 16px));
+  width: 240px;
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  border-radius: 14px;
+  padding: 22px 18px 18px;
+  box-shadow: -8px 12px 32px var(--panel-shadow),
+    0 2px 6px rgba(0, 0, 0, 0.06);
+  transition: transform 0.38s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.28s ease;
+  opacity: 0;
+  pointer-events: none;
+  backdrop-filter: blur(2px);
+}
+
+/* ─── Panel visible ─── */
+.settings.is-open .settings__inner {
+  transform: translateX(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ─── Subtle inner glow border on open ─── */
+.settings.is-open .settings__inner {
+  box-shadow: -8px 12px 32px var(--panel-shadow),
+    0 2px 6px rgba(0, 0, 0, 0.06),
+    0 0 0 1px rgba(22, 23, 105, 0.07);
+}
+
+
+/* ═══════════════════════════════════════════
+   SECTION GROUP + LABEL
+   ═══════════════════════════════════════════ */
+.settings__group {
+  margin-bottom: 18px;
+}
+
+.settings__group:last-child {
+  margin-bottom: 0;
+}
+
+.settings__label {
+  display: block;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--label-color);
+  margin-bottom: 9px;
+  letter-spacing: 0.9px;
+  text-transform: uppercase;
+  transition: color 0.3s ease;
+}
+
+/* ═══════════════════════════════════════════
+   BUTTON ROW
+   ═══════════════════════════════════════════ */
+.settings__actions {
+  display: flex;
+  gap: 7px;
+}
+
+/* ═══════════════════════════════════════════
+   INDIVIDUAL BUTTONS
+   ═══════════════════════════════════════════ */
+.settings__btn {
+  flex: 1;
+  padding: 8px 4px;
+  border-radius: 7px;
+  border: 1.5px solid var(--btn-border);
+  background: var(--btn-bg);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--btn-text);
+  text-align: center;
+  outline: none;
+  position: relative;
+  overflow: hidden;
+  transition: background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.12s ease;
+}
+
+/* ─── Ripple-like inner highlight on hover ─── */
+.settings__btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), transparent 60%);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+
+.settings__btn:hover::before {
+  opacity: 1;
+}
+
+.settings__btn:hover {
+  border-color: var(--btn-border);
+  background: var(--btn-hover-bg);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.settings__btn:active {
+  transform: translateY(0px);
+  box-shadow: none;
+}
+
+/* ─── Active / Selected State ─── */
+.settings__btn.active {
+  background: var(--accent) !important;
+  color: #ffffff !important;
+  border-color: var(--accent) !important;
+  box-shadow: 0 3px 10px var(--accent-glow);
+  font-weight: 600;
+}
+
+.settings__btn.active::before {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), transparent 55%);
+  opacity: 1;
+}
+
+.settings__btn.active:hover {
+  box-shadow: 0 4px 14px var(--accent-glow);
+  transform: translateY(-1px);
+}
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════ */
+@media (max-width: 768px) {
+  .settings__toggle {
+    width: 32px;
+    height: 48px;
+  }
+
+  .settings__toggle svg {
+    width: 17px;
+    height: 17px;
+  }
+
+  .settings__inner {
+    width: 215px;
+    right: 40px;
+    padding: 18px 15px 15px;
+  }
+
+  .settings__btn {
+    font-size: 12px;
+    padding: 7px 3px;
+  }
+}
+
+/* ═══════════════════════════════════════════
+   FOCUS VISIBILITY (accessibility)
+   ═══════════════════════════════════════════ */
+.settings__toggle:focus-visible,
+.settings__btn:focus-visible,
+.settings__close:focus-visible {
+  outline: 2px solid var(--chevron-color);
+  outline-offset: 2px;
+}

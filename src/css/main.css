@@ -1,0 +1,16 @@
+@import "./nav.css";
+@import "./reset.css";
+@import "./normalize.css";
+
+@import "./variables.css";
+@import "./base.css";
+
+@import "./hero.css";
+@import "./components.css";
+@import "./details.css";
+@import "./valuation.css";
+@import "./modal.css";
+@import "./footer.css";
+
+@import "./responsive.css";
+@import "./settings.css";
