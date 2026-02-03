@@ -106,9 +106,10 @@
     .hero-logo {
         width: 180px;
     }
+
     @media (max-height: 768px) {
         .hero-section {
-          padding-top: 8%;
+            padding-top: 8%;
         }
     }
 }
@@ -192,29 +193,31 @@
    PRICE / VALUATION
    ============================================ */
 
-@media (max-width: 992px) {
+@media (max-width: 1024px) {
     .valuation-content {
-        padding: var(--mobile-padding);
+        grid-template-columns: 320px 1fr;
+        gap: 20px;
     }
 
     .price-value {
-        font-size: 1.8rem;
-
+        font-size: 1.5rem;
     }
 }
 
-@media (max-width: 600px) {
-    .price-box {
-        padding: var(--mobile-padding);
-        text-align: center;
+@media (max-width: 1080px) {
+    .valuation-content {
+        grid-template-columns: 1fr;
+        gap: 24px;
     }
 
     .valuation-images {
-        flex-direction: column;
+        grid-template-columns: 1fr;
     }
 
     .valuation-images img {
-        width: 100%;
+        border-radius: 6px;
+        min-height: 200px;
+        max-height: 50svh;
     }
 }
 

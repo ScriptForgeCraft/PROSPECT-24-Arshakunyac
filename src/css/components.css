@@ -128,10 +128,6 @@
   transition: filter 0.25s ease, border-color 0.25s ease;
 }
 
-.gallery-strip .thumb:hover {
-  filter: grayscale(0);
-}
-
 .gallery-strip .thumb.is-active {
   filter: grayscale(0);
   border-color: var(--accent-gold);
