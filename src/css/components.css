@@ -75,12 +75,13 @@
 .main-plan-img {
   width: 100%;
   height: min(60svh, 900px);
-  object-fit: cover;
+  object-fit:cover;
   display: block;
   opacity: 1;
   transition: opacity 8s ease;
   will-change: opacity;
   transition: ease-in-out 0.6s;
+   
 
   &:hover {
     transform: scale(1.04);
@@ -90,6 +91,8 @@
 .main-plan-img.is-fading {
   opacity: 0;
 }
+
+
 
 /* =========================
    GALLERY (SLIDER VERSION)
