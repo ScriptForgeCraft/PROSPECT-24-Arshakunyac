@@ -366,3 +366,347 @@
         height: 240px;
     }
 }
+
+
+
+/* ============================================
+   MODAL PDF
+   ============================================ */
+
+@media (min-width: 1920px) {
+    .modal-content {
+        max-width: 1600px;
+        max-height: 1000px;
+    }
+
+    #modal-title {
+        font-size: 1.5rem;
+    }
+
+    .btn-action {
+        font-size: 1rem;
+        padding: 12px 24px;
+    }
+}
+
+@media (max-width: 1919px) and (min-width: 1024px) {
+    .modal-content {
+        width: 85%;
+        height: 85%;
+    }
+}
+
+@media (max-width: 1023px) {
+    .modal-content {
+        width: 95%;
+        height: 95%;
+        border-radius: 12px;
+    }
+
+    .modal-header {
+        padding: 16px 20px;
+    }
+
+    #modal-title {
+        font-size: 1.1rem;
+        max-width: 50%;
+    }
+
+    .modal-controls {
+        gap: 10px;
+    }
+
+    .btn-action {
+        padding: 8px 16px;
+        font-size: 0.85rem;
+    }
+
+    .btn-close {
+        padding: 8px 12px;
+    }
+
+    .btn-close svg {
+        width: 20px;
+        height: 20px;
+    }
+}
+
+@media (max-width: 767px) {
+    .modal-content {
+        width: 100%;
+        height: 100%;
+        border-radius: 0;
+        max-width: none;
+        max-height: none;
+    }
+
+    .modal-header {
+        padding: 14px 16px;
+    }
+
+    #modal-title {
+        font-size: 1rem;
+        flex: 1 1 100%;
+        margin-bottom: 8px;
+        max-width: 100%;
+    }
+
+    .modal-controls {
+        gap: 8px;
+        width: 100%;
+        justify-content: flex-end;
+    }
+
+    .btn-action {
+        padding: 8px 14px;
+        font-size: 0.8rem;
+        gap: 6px;
+    }
+
+    .btn-close {
+        padding: 8px 10px;
+    }
+
+    .btn-close svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    .pdf-error-message {
+        padding: 20px;
+        max-width: 90%;
+    }
+
+    .pdf-error-message p {
+        font-size: 1rem;
+    }
+
+    .retry-btn {
+        padding: 10px 20px;
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 479px) {
+    .modal-header {
+
+        padding: 12px 14px;
+    }
+
+    #modal-title {
+        font-size: 0.9rem;
+        margin-bottom: 6px;
+    }
+
+    .btn-action {
+        padding: 6px 12px;
+        font-size: 0.75rem;
+    }
+
+    .btn-close {
+        padding: 6px 8px;
+    }
+
+    .btn-close svg {
+        width: 16px;
+        height: 16px;
+    }
+
+    .modal-body::before {
+        width: 40px;
+        height: 40px;
+        border-width: 3px;
+    }
+
+    .modal-body::after {
+        font-size: 0.85rem;
+        top: calc(50% + 30px);
+    }
+}
+
+@media (max-width: 359px) {
+    .modal-header {
+        padding: 10px 12px;
+    }
+
+    #modal-title {
+        font-size: 0.85rem;
+    }
+
+    .btn-action {
+        padding: 5px 10px;
+        font-size: 0.7rem;
+    }
+
+    .btn-close {
+        padding: 5px 6px;
+    }
+
+    .btn-close svg {
+        width: 14px;
+        height: 14px;
+    }
+
+    .pdf-error-message {
+        padding: 16px;
+    }
+
+    .pdf-error-message p {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-height: 500px) and (orientation: landscape) {
+    .modal-content {
+        width: 98%;
+        height: 98%;
+        border-radius: 8px;
+    }
+
+    .modal-header {
+        padding: 8px 16px;
+    }
+
+    #modal-title {
+        font-size: 0.9rem;
+        margin-bottom: 4px;
+    }
+
+    .btn-action,
+    .btn-close {
+        padding: 6px 10px;
+        font-size: 0.75rem;
+    }
+
+    .btn-close svg {
+        width: 16px;
+        height: 16px;
+    }
+
+    .pdf-error-message {
+        padding: 16px;
+        max-width: 350px;
+    }
+
+    .pdf-error-message svg {
+        width: 36px;
+        height: 36px;
+        margin-bottom: 12px;
+    }
+
+    .pdf-error-message p {
+        font-size: 0.9rem;
+        margin-bottom: 12px;
+    }
+
+    .retry-btn {
+        padding: 8px 16px;
+        font-size: 0.8rem;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) and (orientation: landscape) {
+    .modal-content {
+        width: 90%;
+        height: 95%;
+    }
+
+    .modal-header {
+        padding: 14px 20px;
+    }
+}
+
+@media (max-height: 600px) {
+    .modal-content {
+        height: 100%;
+        border-radius: 0;
+    }
+}
+
+/* ============================================
+   ACCESSIBILITY & PREFERENCES
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .modal,
+    .modal-content,
+    .btn-action,
+    .btn-close,
+    .btn-close svg,
+    .retry-btn {
+        transition: none;
+        animation: none;
+    }
+
+    .modal-body::before {
+        animation: none;
+    }
+
+    .pdf-error-message svg {
+        animation: none;
+    }
+
+    .btn-close:hover {
+        transform: none;
+    }
+
+    .btn-action:hover,
+    .retry-btn:hover {
+        transform: none;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    .modal {
+        background: rgba(0, 0, 0, 0.92);
+    }
+
+    .modal-content {
+        background: #1e1e1e;
+        color: #ffffff;
+        box-shadow:
+            0 25px 50px -12px rgba(0, 0, 0, 0.8),
+            0 0 0 1px rgba(255, 255, 255, 0.1);
+    }
+
+    .modal-body {
+        background: #2d2d2d;
+    }
+
+    #pdf-frame {
+        background: #1e1e1e;
+    }
+
+    .pdf-error-message {
+        background: #2d2d2d;
+        color: #ffffff;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    }
+
+    .pdf-error-message p {
+        color: #e0e0e0;
+    }
+}
+
+@media (prefers-contrast: high) {
+    .modal {
+        background: rgba(0, 0, 0, 0.95);
+    }
+
+    .btn-action,
+    .btn-close {
+        border: 2px solid rgba(255, 255, 255, 0.5);
+    }
+
+    .modal-content {
+        border: 2px solid #667eea;
+    }
+}
+
+.btn-action:focus-visible,
+.btn-close:focus-visible,
+.retry-btn:focus-visible {
+    outline: 3px solid rgba(255, 255, 255, 0.6);
+    outline-offset: 2px;
+}

@@ -9,21 +9,12 @@
   opacity: 1;
   z-index: 2000;
   background: #ffffff;
-  padding: 0.8rem 4.5rem;
+  padding: 0.95rem 4.5rem;
+
   transition:
     background-color 0.3s ease,
+
 }
-
-.main-header.scrolled {
-
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-
-  & .main-header__nav a {
-    color: #000000;
-  }
-}
-
-
 
 .main-header.scrolled {
   padding-top: .4rem;
@@ -33,8 +24,6 @@
 .logo.scrolled img {
   width: auto;
   height: 50px;
-
-
 }
 
 .main-header--hidden {
