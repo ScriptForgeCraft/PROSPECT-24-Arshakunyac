@@ -6,155 +6,144 @@
    NAVBAR / HEADER
    ============================================ */
 
-
 @media (max-width: 992px) {
-    .main-header {
-        padding: 0.4rem 2rem;
-    }
+  .main-header {
+    padding: 0.4rem 2rem;
+  }
 
-    .main-header__nav {
-        display: none;
-    }
+  .main-header__nav {
+    display: none;
+  }
 
-    .burger-btn {
-        display: flex;
-    }
+  .burger-btn {
+    display: flex;
+  }
 
-    #documents {
-        scroll-margin-top: 10vh;
-    }
-
+  #documents {
+    scroll-margin-top: 10vh;
+  }
 }
 
 @media (max-width: 600px) {
-    .main-header {
-        padding: 0.6rem 1rem;
-    }
+  .main-header {
+    padding: 0.6rem 1rem;
+  }
 
-    .main-header__logo img {
-        height: 20px;
-    }
+  .main-header__logo img {
+    height: 20px;
+  }
 
-    .burger-btn {
-        width: 26px;
-        height: 20px;
-        gap: 5px;
-        margin-right: 10px;
-    }
+  .burger-btn {
+    width: 26px;
+    height: 20px;
+    gap: 5px;
+    margin-right: 10px;
+  }
 
-    .burger-btn span {
-        height: 2px;
-    }
+  .burger-btn span {
+    height: 2px;
+  }
 
-    .mobile-menu a {
-        font-size: 1.4rem;
-    }
+  .mobile-menu a {
+    font-size: 1.4rem;
+  }
 
-    .nav-links {
-        display: none;
-    }
+  .nav-links {
+    display: none;
+  }
 }
-
 
 /* ============================================
    BASE
    ============================================ */
 @media (max-width: 768px) {
-    .container {
-        width: 97%;
-
-    }
+  .container {
+    width: 97%;
+  }
 }
 
 /* ============================================
    HERO SECTION
    ============================================ */
 
-
 @media (max-width: 1024px) {
-    .hero-section {
-        background-size: cover;
-        background-position: right bottom;
-    }
+  .hero-section {
+    background-size: cover;
+    background-position: right bottom;
+  }
 
-    .hero-title {
-        font-size: 1.8rem;
-        width: 45vw;
-    }
+  .hero-title {
+    font-size: 1.8rem;
+    width: 45vw;
+  }
 
-    .hero-logo {
-        width: 220px;
-    }
+  .hero-logo {
+    width: 220px;
+  }
 }
-
 
 @media (max-width: 768px) {
+  .hero-section {
+    min-height: 50vh;
+  }
+
+  .hero-section::before {
+    clip-path: polygon(0 0, 60% 0, 55% 100%, 0 100%);
+  }
+
+  .hero-title {
+    font-size: 1.5rem;
+    width: 55vw;
+  }
+
+  .hero-logo {
+    width: 180px;
+  }
+
+  @media (max-height: 768px) {
     .hero-section {
-        min-height: 50vh;
+      padding-top: 8%;
     }
-
-
-    .hero-section::before {
-        clip-path: polygon(0 0, 60% 0, 55% 100%, 0 100%);
-    }
-
-    .hero-title {
-        font-size: 1.5rem;
-        width: 55vw;
-    }
-
-    .hero-logo {
-        width: 180px;
-    }
-
-    @media (max-height: 768px) {
-        .hero-section {
-            padding-top: 8%;
-        }
-    }
+  }
 }
 
-
 @media (max-width: 480px) {
-    .hero-section {
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        min-height: 500px;
-        text-align: center;
+  .hero-section {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 500px;
+    text-align: center;
+  }
 
-    }
+  .main-header {
+    background-color: white;
+  }
 
+  .hero-section::before {
+    clip-path: none;
+    background: rgba(255, 255, 255, 0.85);
+  }
 
+  .hero-content {
+    align-items: center;
+    width: 100%;
+  }
 
-    .main-header {
-        background-color: white;
-    }
+  .hero-title {
+    width: 90vw;
+    font-size: 1.4rem;
+    padding: 20px;
+  }
 
-    .hero-section::before {
-        clip-path: none;
-        background: rgba(255, 255, 255, 0.85);
-    }
+  .hero-logo {
+    width: 150px;
+    margin-bottom: 20px;
+  }
 
-    .hero-content {
-        align-items: center;
-        width: 100%;
-    }
-
-    .hero-title {
-        width: 90vw;
-        font-size: 1.4rem;
-        padding: 20px;
-    }
-
-    .hero-logo {
-        width: 150px;
-        margin-bottom: 20px;
-    }
-
-    .hero-section.dark-mode::before {
-        background: rgba(246, 246, 246, 0.879) !important;
-    }
+  .hero-section.dark-mode::before {
+    background: rgba(246, 246, 246, 0.879) !important;
+  }
 }
 
 /* ============================================
@@ -162,31 +151,30 @@
    ============================================ */
 
 @media (max-width: 1080px) {
-    .split-view {
-        grid-template-columns: 1fr;
-        padding: var(--mobile-padding);
-    }
+  .split-view {
+    grid-template-columns: 1fr;
+    padding: var(--mobile-padding);
+  }
 
-    .block {
-        width: 100%;
-    }
+  .block {
+    width: 100%;
+  }
 }
 
 @media (max-width: 900px) {
-    .split-view {
-        grid-template-columns: 1fr;
-    }
+  .split-view {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 600px) {
-    .size-block {
-        padding: var(--mobile-padding);
-    }
+  .size-block {
+    padding: var(--mobile-padding);
+  }
 
-    .size-block ul {
-        grid-template-columns: 1fr;
-    }
-
+  .size-block ul {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* ============================================
@@ -194,31 +182,31 @@
    ============================================ */
 
 @media (max-width: 1024px) {
-    .valuation-content {
-        grid-template-columns: 320px 1fr;
-        gap: 20px;
-    }
+  .valuation-content {
+    grid-template-columns: 320px 1fr;
+    gap: 20px;
+  }
 
-    .price-value {
-        font-size: 1.5rem;
-    }
+  .price-value {
+    font-size: 1.5rem;
+  }
 }
 
 @media (max-width: 1080px) {
-    .valuation-content {
-        grid-template-columns: 1fr;
-        gap: 24px;
-    }
+  .valuation-content {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
 
-    .valuation-images {
-        grid-template-columns: 1fr;
-    }
+  .valuation-images {
+    grid-template-columns: 1fr;
+  }
 
-    .valuation-images img {
-        border-radius: 6px;
-        min-height: 200px;
-        max-height: 50svh;
-    }
+  .valuation-images img {
+    border-radius: 6px;
+    min-height: 200px;
+    max-height: 50svh;
+  }
 }
 
 /* ============================================
@@ -226,92 +214,87 @@
    ============================================ */
 
 @media (max-width: 992px) {
-    @media (orientation: landscape) {
-        .zoom-arrow {
-            display: none;
-        }
-    }
-
+  @media (orientation: landscape) {
     .zoom-arrow {
-        width: 50px;
-        height: 80px;
-        backdrop-filter: none;
-        background-color: rgba(0, 0, 0, 0.249);
-        font-size: 34px;
+      display: none;
     }
+  }
 
+  .zoom-arrow {
+    width: 50px;
+    height: 80px;
+    backdrop-filter: none;
+    background-color: rgba(0, 0, 0, 0.249);
+    font-size: 34px;
+  }
 
-    .zoom-image {
-        min-height: 100%;
-    }
+  .zoom-image {
+    min-height: 100%;
+  }
 
-    .zoom-close {
-        width: 30px;
-        height: 30px;
-        font-size: 16px;
-    }
+  .zoom-close {
+    width: 30px;
+    height: 30px;
+    font-size: 16px;
+  }
 
-    .gallery-strip {
-        grid-template-columns: repeat(2, 1fr);
-    }
+  .gallery-strip {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 @media (max-width: 768px) {
+  .zoom-controls {
+    bottom: 16px;
+    right: 16px;
+    gap: 6px;
+  }
 
-    .zoom-controls {
-        bottom: 16px;
-        right: 16px;
-        gap: 6px;
-    }
+  .zoom-btn-ctrl {
+    width: 44px;
+    height: 44px;
+  }
 
+  .zoom-btn-ctrl svg {
+    width: 20px;
+    height: 20px;
+  }
 
+  .zoom-arrow {
+    width: 40px;
+    height: 70px;
+  }
 
-    .zoom-btn-ctrl {
-        width: 44px;
-        height: 44px;
-    }
-
-    .zoom-btn-ctrl svg {
-        width: 20px;
-        height: 20px;
-    }
-
-    .zoom-arrow {
-        width: 40px;
-        height: 70px;
-    }
-
-    .gallery-strip .thumb {
-        flex: 0 0 calc(50% - 6px);
-        height: 110px;
-    }
+  .gallery-strip .thumb {
+    flex: 0 0 calc(50% - 6px);
+    height: 110px;
+  }
 }
 
 @media (max-width: 480px) {
-    .gallery-strip .thumb {
-        height: 100px;
-    }
+  .gallery-strip .thumb {
+    height: 100px;
+  }
 
-    .zoom-arrow {
-        width: 25px;
-        height: 60px;
-    }
+  .zoom-arrow {
+    width: 25px;
+    height: 60px;
+  }
 
-    .zoom-controls {
-        bottom: 12px;
-        right: 12px;
-    }
+  .zoom-controls {
+    bottom: 12px;
+    right: 12px;
+  }
 
-    .zoom-btn-ctrl {
-        width: 40px;
-        height: 40px;
-    }
+  .zoom-btn-ctrl {
+    width: 40px;
+    height: 40px;
+  }
 
-    .zoom-btn-ctrl svg {
-        width: 18px;
-        height: 18px;
-    }
-
+  .zoom-btn-ctrl svg {
+    width: 18px;
+    height: 18px;
+  }
 }
 
 /* ============================================
@@ -319,308 +302,281 @@
    ============================================ */
 
 @media (max-width: 992px) {
-    .component-display {
-        padding: var(--mobile-padding);
-    }
+  .component-display {
+    padding: var(--mobile-padding);
+  }
 
-    .caption-bg {
-        padding: 5px;
-    }
+  .caption-bg {
+    padding: 5px;
+  }
 }
 
 @media (max-width: 768px) {
+  .caption-bg {
+    padding: 3px;
+  }
 
-    .caption-bg {
-        padding: 3px;
-    }
+  .main-arrow {
+    width: 36px;
+    height: 36px;
+    font-size: 18px;
+  }
 
-    .main-arrow {
-        width: 36px;
-        height: 36px;
-        font-size: 18px;
-    }
+  .main-plan-img {
+    height: 300px;
+  }
 
-    .main-plan-img {
-        height: 300px;
-    }
+  .gallery-arrow {
+    display: none;
+  }
 
-    .gallery-arrow {
-        display: none;
-    }
-
-    .gallery-wrapper {
-        padding: var(--mobile-padding) 0;
-    }
+  .gallery-wrapper {
+    padding: var(--mobile-padding) 0;
+  }
 }
 
 @media (max-width: 480px) {
-    .component-display {
-        gap: 0;
-    }
+  .component-display {
+    gap: 0;
+  }
 
-    .caption-bg {
-        padding: 0;
-    }
+  .caption-bg {
+    padding: 0;
+  }
 
-    .main-plan-img {
-        height: 240px;
-    }
+  .main-plan-img {
+    height: 240px;
+  }
 }
-
-
 
 /* ============================================
    MODAL PDF
    ============================================ */
 
-@media (min-width: 1920px) {
-    .modal-content {
-        max-width: 1600px;
-        max-height: 1000px;
-    }
-
-    #modal-title {
-        font-size: 1.5rem;
-    }
-
-    .btn-action {
-        font-size: 1rem;
-        padding: 12px 24px;
-    }
-}
-
-@media (max-width: 1919px) and (min-width: 1024px) {
-    .modal-content {
-        width: 85%;
-        height: 85%;
-    }
-}
-
 @media (max-width: 1023px) {
-    .modal-content {
-        width: 95%;
-        height: 95%;
-        border-radius: 12px;
-    }
+  .modal-content {
+    width: 95%;
+    height: 95%;
+    border-radius: 12px;
+  }
 
-    .modal-header {
-        padding: 16px 20px;
-    }
+  .modal-header {
+    padding: 16px 20px;
+  }
 
-    #modal-title {
-        font-size: 1.1rem;
-        max-width: 50%;
-    }
+  #modal-title {
+    font-size: 1.1rem;
+    max-width: 50%;
+  }
 
-    .modal-controls {
-        gap: 10px;
-    }
+  .modal-controls {
+    gap: 10px;
+  }
 
-    .btn-action {
-        padding: 8px 16px;
-        font-size: 0.85rem;
-    }
+  .btn-action {
+    padding: 8px 16px;
+    font-size: 0.85rem;
+  }
 
-    .btn-close {
-        padding: 8px 12px;
-    }
+  .btn-close {
+    padding: 8px 12px;
+  }
 
-    .btn-close svg {
-        width: 20px;
-        height: 20px;
-    }
+  .btn-close svg {
+    width: 20px;
+    height: 20px;
+  }
 }
 
 @media (max-width: 767px) {
-    .modal-content {
-        width: 100%;
-        height: 100%;
-        border-radius: 0;
-        max-width: none;
-        max-height: none;
-    }
+  .modal-content {
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+    max-width: none;
+    max-height: none;
+  }
 
-    .modal-header {
-        padding: 14px 16px;
-    }
+  .modal-header {
+    padding: 14px 16px;
+  }
 
-    #modal-title {
-        font-size: 1rem;
-        flex: 1 1 100%;
-        margin-bottom: 8px;
-        max-width: 100%;
-    }
+  #modal-title {
+    font-size: 1rem;
+    flex: 1 1 100%;
+    margin-bottom: 8px;
+    max-width: 100%;
+  }
 
-    .modal-controls {
-        gap: 8px;
-        width: 100%;
-        justify-content: flex-end;
-    }
+  .modal-controls {
+    gap: 8px;
+    width: 100%;
+    justify-content: flex-end;
+  }
 
-    .btn-action {
-        padding: 8px 14px;
-        font-size: 0.8rem;
-        gap: 6px;
-    }
+  .btn-action {
+    padding: 8px 14px;
+    font-size: 0.8rem;
+    gap: 6px;
+  }
 
-    .btn-close {
-        padding: 8px 10px;
-    }
+  .btn-close {
+    padding: 8px 10px;
+  }
 
-    .btn-close svg {
-        width: 18px;
-        height: 18px;
-    }
+  .btn-close svg {
+    width: 18px;
+    height: 18px;
+  }
 
-    .pdf-error-message {
-        padding: 20px;
-        max-width: 90%;
-    }
+  .pdf-error-message {
+    padding: 20px;
+    max-width: 90%;
+  }
 
-    .pdf-error-message p {
-        font-size: 1rem;
-    }
+  .pdf-error-message p {
+    font-size: 1rem;
+  }
 
-    .retry-btn {
-        padding: 10px 20px;
-        font-size: 0.85rem;
-    }
+  .retry-btn {
+    padding: 10px 20px;
+    font-size: 0.85rem;
+  }
 }
 
 @media (max-width: 479px) {
-    .modal-header {
+  .modal-header {
+    padding: 12px 14px;
+  }
 
-        padding: 12px 14px;
-    }
+  #modal-title {
+    font-size: 0.9rem;
+    margin-bottom: 6px;
+  }
 
-    #modal-title {
-        font-size: 0.9rem;
-        margin-bottom: 6px;
-    }
+  .btn-action {
+    padding: 6px 12px;
+    font-size: 0.75rem;
+  }
 
-    .btn-action {
-        padding: 6px 12px;
-        font-size: 0.75rem;
-    }
+  .btn-close {
+    padding: 6px 8px;
+  }
 
-    .btn-close {
-        padding: 6px 8px;
-    }
+  .btn-close svg {
+    width: 16px;
+    height: 16px;
+  }
 
-    .btn-close svg {
-        width: 16px;
-        height: 16px;
-    }
+  .modal-body::before {
+    width: 40px;
+    height: 40px;
+    border-width: 3px;
+  }
 
-    .modal-body::before {
-        width: 40px;
-        height: 40px;
-        border-width: 3px;
-    }
-
-    .modal-body::after {
-        font-size: 0.85rem;
-        top: calc(50% + 30px);
-    }
+  .modal-body::after {
+    font-size: 0.85rem;
+    top: calc(50% + 30px);
+  }
 }
 
 @media (max-width: 359px) {
-    .modal-header {
-        padding: 10px 12px;
-    }
+  .modal-header {
+    padding: 10px 12px;
+  }
 
-    #modal-title {
-        font-size: 0.85rem;
-    }
+  #modal-title {
+    font-size: 0.85rem;
+  }
 
-    .btn-action {
-        padding: 5px 10px;
-        font-size: 0.7rem;
-    }
+  .btn-action {
+    padding: 5px 10px;
+    font-size: 0.7rem;
+  }
 
-    .btn-close {
-        padding: 5px 6px;
-    }
+  .btn-close {
+    padding: 5px 6px;
+  }
 
-    .btn-close svg {
-        width: 14px;
-        height: 14px;
-    }
+  .btn-close svg {
+    width: 14px;
+    height: 14px;
+  }
 
-    .pdf-error-message {
-        padding: 16px;
-    }
+  .pdf-error-message {
+    padding: 16px;
+  }
 
-    .pdf-error-message p {
-        font-size: 0.9rem;
-    }
+  .pdf-error-message p {
+    font-size: 0.9rem;
+  }
 }
 
 @media (max-height: 500px) and (orientation: landscape) {
-    .modal-content {
-        width: 98%;
-        height: 98%;
-        border-radius: 8px;
-    }
+  .modal-content {
+    width: 98%;
+    height: 98%;
+    border-radius: 8px;
+  }
 
-    .modal-header {
-        padding: 8px 16px;
-    }
+  .modal-header {
+    padding: 8px 16px;
+  }
 
-    #modal-title {
-        font-size: 0.9rem;
-        margin-bottom: 4px;
-    }
+  #modal-title {
+    font-size: 0.9rem;
+    margin-bottom: 4px;
+  }
 
-    .btn-action,
-    .btn-close {
-        padding: 6px 10px;
-        font-size: 0.75rem;
-    }
+  .btn-action,
+  .btn-close {
+    padding: 6px 10px;
+    font-size: 0.75rem;
+  }
 
-    .btn-close svg {
-        width: 16px;
-        height: 16px;
-    }
+  .btn-close svg {
+    width: 16px;
+    height: 16px;
+  }
 
-    .pdf-error-message {
-        padding: 16px;
-        max-width: 350px;
-    }
+  .pdf-error-message {
+    padding: 16px;
+    max-width: 350px;
+  }
 
-    .pdf-error-message svg {
-        width: 36px;
-        height: 36px;
-        margin-bottom: 12px;
-    }
+  .pdf-error-message svg {
+    width: 36px;
+    height: 36px;
+    margin-bottom: 12px;
+  }
 
-    .pdf-error-message p {
-        font-size: 0.9rem;
-        margin-bottom: 12px;
-    }
+  .pdf-error-message p {
+    font-size: 0.9rem;
+    margin-bottom: 12px;
+  }
 
-    .retry-btn {
-        padding: 8px 16px;
-        font-size: 0.8rem;
-    }
+  .retry-btn {
+    padding: 8px 16px;
+    font-size: 0.8rem;
+  }
 }
 
 @media (min-width: 768px) and (max-width: 1023px) and (orientation: landscape) {
-    .modal-content {
-        width: 90%;
-        height: 95%;
-    }
+  .modal-content {
+    width: 90%;
+    height: 95%;
+  }
 
-    .modal-header {
-        padding: 14px 20px;
-    }
+  .modal-header {
+    padding: 14px 20px;
+  }
 }
 
 @media (max-height: 600px) {
-    .modal-content {
-        height: 100%;
-        border-radius: 0;
-    }
+  .modal-content {
+    height: 100%;
+    border-radius: 0;
+  }
 }
 
 /* ============================================
@@ -628,85 +584,84 @@
    ============================================ */
 
 @media (prefers-reduced-motion: reduce) {
+  .modal,
+  .modal-content,
+  .btn-action,
+  .btn-close,
+  .btn-close svg,
+  .retry-btn {
+    transition: none;
+    animation: none;
+  }
 
-    .modal,
-    .modal-content,
-    .btn-action,
-    .btn-close,
-    .btn-close svg,
-    .retry-btn {
-        transition: none;
-        animation: none;
-    }
+  .modal-body::before {
+    animation: none;
+  }
 
-    .modal-body::before {
-        animation: none;
-    }
+  .pdf-error-message svg {
+    animation: none;
+  }
 
-    .pdf-error-message svg {
-        animation: none;
-    }
+  .btn-close:hover {
+    transform: none;
+  }
 
-    .btn-close:hover {
-        transform: none;
-    }
-
-    .btn-action:hover,
-    .retry-btn:hover {
-        transform: none;
-    }
+  .btn-action:hover,
+  .retry-btn:hover {
+    transform: none;
+  }
 }
 
 @media (prefers-color-scheme: dark) {
-    .modal {
-        background: rgba(0, 0, 0, 0.92);
-    }
+  .modal {
+    background: rgba(0, 0, 0, 0.92);
+  }
 
-    .modal-content {
-        background: #1e1e1e;
-        color: #ffffff;
-        box-shadow:
-            0 25px 50px -12px rgba(0, 0, 0, 0.8),
-            0 0 0 1px rgba(255, 255, 255, 0.1);
-    }
+  .modal-content {
+    background: #1e1e1e;
+    color: #ffffff;
+    box-shadow:
+      0 25px 50px -12px rgba(0, 0, 0, 0.8),
+      0 0 0 1px rgba(255, 255, 255, 0.1);
+  }
 
-    .modal-body {
-        background: #2d2d2d;
-    }
+  .modal-body {
+    background: #2d2d2d;
+  }
 
-    #pdf-frame {
-        background: #1e1e1e;
-    }
+  #pdf-frame {
+    background: #1e1e1e;
+  }
 
-    .pdf-error-message {
-        background: #2d2d2d;
-        color: #ffffff;
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-    }
+  .pdf-error-message {
+    background: #2d2d2d;
+    color: #ffffff;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  }
 
-    .pdf-error-message p {
-        color: #e0e0e0;
-    }
+  .pdf-error-message p {
+    color: #e0e0e0;
+  }
 }
 
 @media (prefers-contrast: high) {
-    .modal {
-        background: rgba(0, 0, 0, 0.95);
-    }
+  .modal {
+    background: rgba(0, 0, 0, 0.95);
+  }
 
-    .btn-action,
-    .btn-close {
-        border: 2px solid rgba(255, 255, 255, 0.5);
-    }
+  .btn-action,
+  .btn-close {
+    border: 2px solid rgba(255, 255, 255, 0.5);
+  }
 
-    .modal-content {
-        border: 2px solid #667eea;
-    }
+  .modal-content {
+    border: 2px solid #667eea;
+  }
 }
 
 .btn-action:focus-visible,
 .btn-close:focus-visible,
 .retry-btn:focus-visible {
-    outline: 3px solid rgba(255, 255, 255, 0.6);
-    outline-offset: 2px;
+  outline: 3px solid rgba(255, 255, 255, 0.6);
+  outline-offset: 2px;
 }
