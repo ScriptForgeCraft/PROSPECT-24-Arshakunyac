@@ -3,6 +3,20 @@ html {
   scrollbar-width: thin;
 }
 
+#hero {
+  outline: 4px solid #ffffff;
+  outline-offset: -4px;
+  border-radius: 20px;
+
+}
+
+@media (max-width: 768px) {
+  #hero {
+    outline: none;
+    border-radius: 0;
+  }
+}
+
 #components {
   scroll-margin-top: 8vh;
 }

@@ -10,15 +10,17 @@
   z-index: 2000;
   background: #ffffff;
   padding: 0.95rem 4.5rem;
-
   transition:
     background-color 0.3s ease,
+    box-shadow 0.3s ease;
 
 }
 
 .main-header.scrolled {
   padding-top: .4rem;
   padding-bottom: .4rem;
+  box-shadow: 0px 4px 4px rgba(24, 24, 24, 0.148);
+
 }
 
 .logo.scrolled img {
