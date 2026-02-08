@@ -44,8 +44,8 @@
 .block {
   border: 1px solid rgb(49, 49, 49);
   padding: 20px;
-  border-radius: 12px;
-  background: linear-gradient(10deg, #192134b9 0%, #151922b9 100%);
+  border-radius: 6px;
+  background: #192134b9;
   border: none;
 
   & ul {
@@ -60,7 +60,7 @@
     line-height: 1.4;
     padding: 10px;
     border: none;
-    background: linear-gradient(180deg, #222b4045 0%, #15192249 100%);
+    background: #1b253bc2;
     color: white;
     border-radius: 6px;
   }
@@ -153,7 +153,7 @@
   justify-content: space-between;
   padding: 5px 10px;
   flex: 1;
-  background: #181d2a;
+  background: #1922397b;
   border: 1px solid rgba(255, 255, 255, 0.08);
   color: var(--text-primary);
 
@@ -241,7 +241,7 @@
 }
 
 .left-shadow {
-  background: linear-gradient(-45deg, #222b40a1 0%, #1519229d 100%);
+  background: #222b40a1;
   box-shadow: -7px 0 0 rgba(255, 255, 255, 0.904);
   margin-left: 7px;
   border-radius: 0 6px 6px 0;
