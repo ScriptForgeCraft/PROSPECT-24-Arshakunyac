@@ -106,6 +106,7 @@
 .valuation-images {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
+  max-height: 35svh;
   gap: 20px;
 }
 
