@@ -1,8 +1,9 @@
 import Swiper from "swiper";
-import { FreeMode } from "swiper/modules";
+import { FreeMode, Zoom } from "swiper/modules";
 
 import "swiper/css";
 import "swiper/css/free-mode";
+import "swiper/css/zoom";
 
 (() => {
     const mainImg = document.getElementById("mainPlanImg");
@@ -17,6 +18,7 @@ import "swiper/css/free-mode";
     const btnMainNext = document.querySelector(".main-arrow.next");
 
     const zoomOverlay = document.getElementById("zoomOverlay");
+    const zoomContainer = zoomOverlay?.querySelector(".zoom-container");
     const zoomImage = document.getElementById("zoomImage");
     const zoomClose = zoomOverlay?.querySelector(".zoom-close");
     const zoomPrev = zoomOverlay?.querySelector(".zoom-arrow.prev");
@@ -32,35 +34,26 @@ import "swiper/css/free-mode";
     let pendingIndex = null;
     let isFading = false;
 
-    // Zoom state
-    let scale = 1;
-    let translateX = 0;
-    let translateY = 0;
-    let isDraggingZoom = false;
-    let startDragX = 0;
-    let startDragY = 0;
-    let dragDistX = 0;
-    let dragDistY = 0;
+    let currentScale = 1;
 
     const MIN_SCALE = 1;
     const MAX_SCALE = 5;
 
-    // Double-tap state
     let lastTapTime = 0;
     let lastTapX = 0;
     let lastTapY = 0;
     const DOUBLE_TAP_DELAY = 300;
     const DOUBLE_TAP_DISTANCE = 30;
 
-    // Swipe state (inside zoom)
     let zoomSwipeStartX = 0;
     let zoomSwipeStartY = 0;
     let zoomSwipeTracking = false;
     const ZOOM_SWIPE_THRESHOLD = 40;
     const ZOOM_SWIPE_LOCK_AXIS_THRESHOLD = 10;
     let zoomSwipeAxis = null;
+    let dragDistX = 0;
+    let dragDistY = 0;
 
-    // Pinch state
     let isPinching = false;
     let pinchStartDist = 0;
     let pinchStartScale = 1;
@@ -68,6 +61,8 @@ import "swiper/css/free-mode";
     let pinchCenterY = 0;
 
     const preloadedSet = new Set();
+
+    let zoomSwiper = null;
 
     function preloadImage(src) {
         if (!src || preloadedSet.has(src)) return;
@@ -100,7 +95,10 @@ import "swiper/css/free-mode";
         function loadNext(items, idx) {
             if (idx >= items.length) return;
 
-            requestIdleCallback((deadline) => {
+
+            const rIC = window.requestIdleCallback || ((cb) => setTimeout(() => cb({ timeRemaining: () => 50 }), 1));
+
+            rIC((deadline) => {
                 let current = idx;
                 while (current < items.length && deadline.timeRemaining() > 1) {
                     preloadImage(items[current]);
@@ -152,7 +150,7 @@ import "swiper/css/free-mode";
     function updateZoomButtons() {
         if (!zoomInBtn || !zoomOutBtn || !zoomResetBtn) return;
 
-        if (scale > 1) {
+        if (currentScale > 1) {
             zoomResetBtn.classList.remove("at-limit");
             zoomResetBtn.disabled = false;
         } else {
@@ -160,7 +158,7 @@ import "swiper/css/free-mode";
             zoomResetBtn.disabled = true;
         }
 
-        if (scale >= MAX_SCALE) {
+        if (currentScale >= MAX_SCALE) {
             zoomInBtn.classList.add("at-limit");
             zoomInBtn.disabled = true;
         } else {
@@ -168,7 +166,7 @@ import "swiper/css/free-mode";
             zoomInBtn.disabled = false;
         }
 
-        if (scale <= MIN_SCALE) {
+        if (currentScale <= MIN_SCALE) {
             zoomOutBtn.classList.add("at-limit");
             zoomOutBtn.disabled = true;
         } else {
@@ -177,46 +175,98 @@ import "swiper/css/free-mode";
         }
     }
 
+
+
+    function setSwiperZoom(newScale, transitionDuration = 300) {
+        if (!zoomSwiper || !zoomSwiper.zoom) return;
+
+        currentScale = Math.min(Math.max(MIN_SCALE, newScale), MAX_SCALE);
+
+        if (currentScale === 1) {
+            zoomSwiper.zoom.out();
+        } else {
+
+            zoomSwiper.zoom.in(currentScale);
+        }
+
+        updateZoomButtons();
+    }
+
     function resetZoomTransform() {
-        scale = 1;
-        translateX = 0;
-        translateY = 0;
-        if (zoomImage) {
-            zoomImage.style.transformOrigin = "center center";
-            zoomImage.style.transform = `scale(1) translate(0px, 0px)`;
-            zoomImage.style.cursor = "default";
+        currentScale = 1;
+        if (zoomSwiper && zoomSwiper.zoom) {
+            zoomSwiper.zoom.out();
         }
         updateZoomButtons();
     }
 
-    function constrainTranslation() {
-        if (!zoomImage || scale <= 1) {
-            translateX = 0;
-            translateY = 0;
-            return;
+    function initZoomSwiper() {
+        if (!zoomContainer || !zoomImage) return;
+
+        if (zoomSwiper) {
+            zoomSwiper.destroy(true, true);
+            zoomSwiper = null;
         }
 
-        const rect = zoomImage.getBoundingClientRect();
-        const containerRect = zoomImage.parentElement.getBoundingClientRect();
+        let swiperWrapper = zoomContainer.querySelector('.swiper-wrapper');
+        let swiperSlide = zoomContainer.querySelector('.swiper-slide');
 
-        const scaledWidth = rect.width;
-        const scaledHeight = rect.height;
+        if (!swiperWrapper) {
+            swiperWrapper = document.createElement('div');
+            swiperWrapper.className = 'swiper-wrapper';
+            zoomContainer.appendChild(swiperWrapper);
+        }
 
-        const maxTranslateX = Math.max(0, (scaledWidth - containerRect.width) / 2);
-        const maxTranslateY = Math.max(0, (scaledHeight - containerRect.height) / 2);
+        if (!swiperSlide) {
+            swiperSlide = document.createElement('div');
+            swiperSlide.className = 'swiper-slide';
+        }
 
-        translateX = Math.max(-maxTranslateX, Math.min(maxTranslateX, translateX));
-        translateY = Math.max(-maxTranslateY, Math.min(maxTranslateY, translateY));
-    }
+        if (swiperSlide.parentElement !== swiperWrapper) {
+            swiperWrapper.appendChild(swiperSlide);
+        }
+        let zoomImgContainer = swiperSlide.querySelector('.swiper-zoom-container');
+        if (!zoomImgContainer) {
+            zoomImgContainer = document.createElement('div');
+            zoomImgContainer.className = 'swiper-zoom-container';
+            swiperSlide.appendChild(zoomImgContainer);
+        }
 
-    function applyZoomTransform() {
-        if (!zoomImage) return;
+        if (zoomImage.parentElement !== zoomImgContainer) {
+            zoomImgContainer.appendChild(zoomImage);
+        }
+        if (!zoomContainer.classList.contains('swiper')) {
+            zoomContainer.classList.add('swiper');
+        }
 
-        constrainTranslation();
+        zoomSwiper = new Swiper(zoomContainer, {
+            modules: [Zoom],
+            zoom: {
+                maxRatio: MAX_SCALE,
+                minRatio: MIN_SCALE,
+                toggle: true,
+            },
+            allowTouchMove: true,
+            on: {
+                zoomChange: (swiper, scale) => {
+                    currentScale = scale;
+                    updateZoomButtons();
 
-        zoomImage.style.transformOrigin = "center center";
-        zoomImage.style.transform = `scale(${scale}) translate(${translateX / scale}px, ${translateY / scale}px)`;
 
+                },
+                touchStart: (swiper, e) => {
+                    handleZoomTouchStart(e);
+                },
+                touchMove: (swiper, e) => {
+                    handleZoomTouchMove(e);
+                },
+                touchEnd: (swiper, e) => {
+                    handleZoomTouchEnd(e);
+                }
+            }
+        });
+
+        currentScale = 1;
         updateZoomButtons();
     }
 
@@ -227,7 +277,10 @@ import "swiper/css/free-mode";
         zoomOverlay.classList.add("is-open");
         zoomOverlay.setAttribute("aria-hidden", "false");
         document.body.style.overflow = "hidden";
-        resetZoomTransform();
+
+        setTimeout(() => {
+            initZoomSwiper();
+        }, 50);
     }
 
     function closeZoom() {
@@ -235,7 +288,16 @@ import "swiper/css/free-mode";
         zoomOverlay.classList.remove("is-open");
         zoomOverlay.setAttribute("aria-hidden", "true");
         document.body.style.overflow = "";
+
         resetZoomTransform();
+
+        if (zoomSwiper) {
+            zoomSwiper.destroy(true, true);
+            zoomSwiper = null;
+        }
+
+        currentScale = 1;
+        updateZoomButtons();
     }
 
     function applyImage(index) {
@@ -251,6 +313,9 @@ import "swiper/css/free-mode";
         if (isZoomOpen() && zoomImage) {
             const largeSrc = thumbs[index]?.dataset.large || fullSrc;
             zoomImage.src = largeSrc;
+
+
+            resetZoomTransform();
         }
 
         setActiveThumb(index);
@@ -282,61 +347,24 @@ import "swiper/css/free-mode";
     }
 
     function handleZoomWheel(e) {
-        if (!isZoomOpen()) return;
+        if (!isZoomOpen() || !zoomSwiper) return;
         e.preventDefault();
 
         const delta = e.deltaY > 0 ? -0.3 : 0.3;
-        const newScale = Math.min(Math.max(MIN_SCALE, scale + delta), MAX_SCALE);
+        const newScale = currentScale + delta;
 
-        if (newScale === 1) {
-            resetZoomTransform();
-            return;
-        }
-
-        const rect = zoomImage.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-
-        const centerX = rect.width / 2;
-        const centerY = rect.height / 2;
-
-        const imgX = (x - centerX - translateX) / scale;
-        const imgY = (y - centerY - translateY) / scale;
-
-        scale = newScale;
-
-        translateX = x - centerX - imgX * scale;
-        translateY = y - centerY - imgY * scale;
-
-        applyZoomTransform();
+        setSwiperZoom(newScale, 100);
     }
 
     function handleDoubleTap(clientX, clientY) {
-        if (!zoomImage) return;
+        if (!zoomSwiper || !zoomImage) return;
 
-        if (scale > 1) {
+        if (currentScale > 1) {
             resetZoomTransform();
-            return;
+        } else {
+
+            setSwiperZoom(3, 300);
         }
-
-        const rect = zoomImage.getBoundingClientRect();
-        const x = clientX - rect.left;
-        const y = clientY - rect.top;
-
-        const centerX = rect.width / 2;
-        const centerY = rect.height / 2;
-
-        const targetScale = 3;
-
-        const imgX = (x - centerX - translateX) / scale;
-        const imgY = (y - centerY - translateY) / scale;
-
-        scale = targetScale;
-
-        translateX = x - centerX - imgX * scale;
-        translateY = y - centerY - imgY * scale;
-
-        applyZoomTransform();
     }
 
     function getPinchDist(touches) {
@@ -354,37 +382,44 @@ import "swiper/css/free-mode";
     }
 
     function handleZoomTouchStart(e) {
-        if (e.touches.length === 2) {
+
+        const touches = e.touches || (e.originalEvent && e.originalEvent.touches);
+        if (!touches || touches.length === 0) return;
+
+
+        if (touches.length === 2) {
             isPinching = true;
             zoomSwipeTracking = false;
-            isDraggingZoom = false;
 
-            pinchStartDist = getPinchDist(e.touches);
-            pinchStartScale = scale;
+            pinchStartDist = getPinchDist(touches);
+            pinchStartScale = currentScale;
 
-            const center = getPinchCenter(e.touches);
+            const center = getPinchCenter(touches);
             pinchCenterX = center.x;
             pinchCenterY = center.y;
 
-            e.preventDefault();
+            if (e.preventDefault) e.preventDefault();
             return;
         }
 
-        if (e.touches.length > 2) return;
+        if (touches.length > 2) return;
 
-        const touch = e.touches[0];
+
+        const touch = touches[0];
+        if (!touch) return;
+
         const clientX = touch.clientX;
         const clientY = touch.clientY;
         const now = Date.now();
-
 
         const timeDiff = now - lastTapTime;
         const distX = Math.abs(clientX - lastTapX);
         const distY = Math.abs(clientY - lastTapY);
 
+
         if (timeDiff < DOUBLE_TAP_DELAY && distX < DOUBLE_TAP_DISTANCE && distY < DOUBLE_TAP_DISTANCE) {
             lastTapTime = 0;
-            e.preventDefault();
+            if (e.preventDefault) e.preventDefault();
             handleDoubleTap(clientX, clientY);
             return;
         }
@@ -393,104 +428,69 @@ import "swiper/css/free-mode";
         lastTapX = clientX;
         lastTapY = clientY;
 
-        zoomSwipeStartX = clientX;
-        zoomSwipeStartY = clientY;
-        zoomSwipeTracking = true;
-        zoomSwipeAxis = null;
-        dragDistX = 0;
-        dragDistY = 0;
 
-        if (scale > 1) {
-            isDraggingZoom = true;
-            startDragX = clientX - translateX;
-            startDragY = clientY - translateY;
-            if (zoomImage) zoomImage.style.cursor = "grabbing";
+        if (currentScale <= 1) {
+            zoomSwipeStartX = clientX;
+            zoomSwipeStartY = clientY;
+            zoomSwipeTracking = true;
+            zoomSwipeAxis = null;
+            dragDistX = 0;
+            dragDistY = 0;
         }
-
-        e.preventDefault();
     }
 
     function handleZoomTouchMove(e) {
 
-        if (e.touches.length === 2 && isPinching) {
-            e.preventDefault();
+        const touches = e.touches || (e.originalEvent && e.originalEvent.touches);
+        if (!touches) return;
 
-            const currentDist = getPinchDist(e.touches);
+
+        if (touches.length === 2 && isPinching) {
+            if (e.preventDefault) e.preventDefault();
+
+            const currentDist = getPinchDist(touches);
             const ratio = currentDist / pinchStartDist;
-            const newScale = Math.min(Math.max(MIN_SCALE, pinchStartScale * ratio), MAX_SCALE);
+            const newScale = pinchStartScale * ratio;
 
-            if (newScale <= MIN_SCALE) {
-                resetZoomTransform();
-                return;
-            }
-
-            if (zoomImage) {
-                const rect = zoomImage.getBoundingClientRect();
-                const x = pinchCenterX - rect.left;
-                const y = pinchCenterY - rect.top;
-
-                const centerX = rect.width / 2;
-                const centerY = rect.height / 2;
-
-                const imgX = (x - centerX - translateX) / scale;
-                const imgY = (y - centerY - translateY) / scale;
-
-                scale = newScale;
-
-                translateX = x - centerX - imgX * scale;
-                translateY = y - centerY - imgY * scale;
-            } else {
-                scale = newScale;
-            }
-
-            applyZoomTransform();
+            setSwiperZoom(newScale, 0);
             return;
         }
 
+        if (touches.length > 1) return;
 
-        if (e.touches.length > 1) return;
-        if (!zoomSwipeTracking) return;
 
-        e.preventDefault();
+        if (currentScale <= 1 && zoomSwipeTracking) {
+            const touch = touches[0];
+            if (!touch) return;
 
-        const touch = e.touches[0];
-        const clientX = touch.clientX;
-        const clientY = touch.clientY;
+            const clientX = touch.clientX;
+            const clientY = touch.clientY;
 
-        dragDistX = clientX - zoomSwipeStartX;
-        dragDistY = clientY - zoomSwipeStartY;
+            dragDistX = clientX - zoomSwipeStartX;
+            dragDistY = clientY - zoomSwipeStartY;
 
-        if (!zoomSwipeAxis) {
-            if (Math.abs(dragDistX) > ZOOM_SWIPE_LOCK_AXIS_THRESHOLD || Math.abs(dragDistY) > ZOOM_SWIPE_LOCK_AXIS_THRESHOLD) {
-                zoomSwipeAxis = Math.abs(dragDistX) > Math.abs(dragDistY) ? 'x' : 'y';
+            if (!zoomSwipeAxis) {
+                if (Math.abs(dragDistX) > ZOOM_SWIPE_LOCK_AXIS_THRESHOLD || Math.abs(dragDistY) > ZOOM_SWIPE_LOCK_AXIS_THRESHOLD) {
+                    zoomSwipeAxis = Math.abs(dragDistX) > Math.abs(dragDistY) ? 'x' : 'y';
+                }
             }
         }
 
-        if (scale > 1 && isDraggingZoom) {
-            translateX = clientX - startDragX;
-            translateY = clientY - startDragY;
-            applyZoomTransform();
-        }
+
     }
 
     function handleZoomTouchEnd(e) {
-
         if (isPinching) {
             isPinching = false;
-            e.preventDefault();
+            if (e.preventDefault) e.preventDefault();
             return;
         }
 
         if (!zoomSwipeTracking) return;
         zoomSwipeTracking = false;
 
-        if (isDraggingZoom) {
-            isDraggingZoom = false;
-            if (zoomImage && scale > 1) zoomImage.style.cursor = "grab";
-            return;
-        }
 
-        if (scale <= 1 && zoomSwipeAxis === 'x' && Math.abs(dragDistX) >= ZOOM_SWIPE_THRESHOLD) {
+        if (currentScale <= 1 && zoomSwipeAxis === 'x' && Math.abs(dragDistX) >= ZOOM_SWIPE_THRESHOLD) {
             if (dragDistX < 0) {
                 requestSwitch(activeIndex + 1);
             } else {
@@ -502,52 +502,16 @@ import "swiper/css/free-mode";
         dragDistY = 0;
     }
 
-    // --- Mouse handlers (desktop) ---
-    function handleZoomMouseDown(e) {
-        if (scale <= 1) return;
-
-        isDraggingZoom = true;
-        startDragX = e.clientX - translateX;
-        startDragY = e.clientY - translateY;
-        if (zoomImage) zoomImage.style.cursor = "grabbing";
-
-        e.preventDefault();
-    }
-
-    function handleZoomMouseMove(e) {
-        if (!isDraggingZoom || scale <= 1) return;
-        e.preventDefault();
-
-        translateX = e.clientX - startDragX;
-        translateY = e.clientY - startDragY;
-
-        applyZoomTransform();
-    }
-
-    function handleZoomMouseUp(e) {
-        if (!isDraggingZoom) return;
-
-        isDraggingZoom = false;
-        if (zoomImage && scale > 1) zoomImage.style.cursor = "grab";
-    }
-
     function zoomIn() {
-        if (scale >= MAX_SCALE) return;
-
-        scale = Math.min(scale + 0.5, MAX_SCALE);
-        applyZoomTransform();
+        const newScale = Math.min(currentScale + 0.5, MAX_SCALE);
+        setSwiperZoom(newScale);
     }
 
     function zoomOut() {
-        if (scale <= MIN_SCALE) return;
-
-        scale = Math.max(scale - 0.5, MIN_SCALE);
-        if (scale === 1) {
-            resetZoomTransform();
-        } else {
-            applyZoomTransform();
-        }
+        const newScale = Math.max(currentScale - 0.5, MIN_SCALE);
+        setSwiperZoom(newScale);
     }
+
 
     thumbs.forEach((thumb, i) => thumb.addEventListener("click", () => requestSwitch(i)));
 
@@ -560,39 +524,78 @@ import "swiper/css/free-mode";
     zoomBtn?.addEventListener("click", (e) => { e.preventDefault(); e.stopPropagation(); openZoom(); });
     zoomClose?.addEventListener("click", closeZoom);
 
-    zoomInBtn?.addEventListener("click", (e) => { e.stopPropagation(); zoomIn(); });
-    zoomOutBtn?.addEventListener("click", (e) => { e.stopPropagation(); zoomOut(); });
-    zoomResetBtn?.addEventListener("click", (e) => { e.stopPropagation(); resetZoomTransform(); });
-    zoomOverlay?.addEventListener("click", (e) => {
-        if (e.target === zoomOverlay || e.target.classList.contains('zoom-container')) {
-            closeZoom();
+    zoomInBtn?.addEventListener("click", (e) => { e.preventDefault(); e.stopPropagation(); zoomIn(); });
+    zoomOutBtn?.addEventListener("click", (e) => { e.preventDefault(); e.stopPropagation(); zoomOut(); });
+    zoomResetBtn?.addEventListener("click", (e) => { e.preventDefault(); e.stopPropagation(); resetZoomTransform(); });
+
+    let overlayPointerStart = { x: 0, y: 0 };
+    const TAP_THRESHOLD = 10;
+
+    zoomOverlay?.addEventListener("pointerdown", (e) => {
+        overlayPointerStart = { x: e.clientX, y: e.clientY };
+    });
+
+    zoomOverlay?.addEventListener("pointerup", (e) => {
+        const dx = Math.abs(e.clientX - overlayPointerStart.x);
+        const dy = Math.abs(e.clientY - overlayPointerStart.y);
+
+
+        if (dx < TAP_THRESHOLD && dy < TAP_THRESHOLD) {
+
+            const target = e.target;
+            const isButton = target.closest('.zoom-in, .zoom-out, .zoom-reset, .zoom-close, .zoom-arrow');
+            const isImage = target === zoomImage || target.closest('.swiper-zoom-container img');
+
+            if (!isButton && !isImage) {
+                closeZoom();
+            }
         }
     });
 
     zoomNext?.addEventListener("click", (e) => { e.stopPropagation(); requestSwitch(activeIndex + 1); });
     zoomPrev?.addEventListener("click", (e) => { e.stopPropagation(); requestSwitch(activeIndex - 1); });
 
-    if (zoomImage) {
-        zoomImage.addEventListener("mousedown", handleZoomMouseDown);
-        zoomImage.addEventListener("mousemove", handleZoomMouseMove);
-        zoomImage.addEventListener("mouseup", handleZoomMouseUp);
-        zoomImage.addEventListener("mouseleave", handleZoomMouseUp);
 
-
-        zoomImage.addEventListener("wheel", handleZoomWheel, { passive: false });
-
-        zoomImage.addEventListener("touchstart", handleZoomTouchStart, { passive: false });
-        zoomImage.addEventListener("touchmove", handleZoomTouchMove, { passive: false });
-        zoomImage.addEventListener("touchend", handleZoomTouchEnd, { passive: false });
-
-        zoomImage.addEventListener("load", () => {
-            if (scale > 1) {
-                applyZoomTransform();
-            }
-        });
+    if (zoomContainer) {
+        zoomContainer.addEventListener("wheel", handleZoomWheel, { passive: false });
     }
 
-    // Keyboard navigation
+
+    let zoomTouchStartX = 0;
+    let zoomTouchStartY = 0;
+    let zoomTouchMoved = false;
+    const ZOOM_TOUCH_THRESHOLD = 50;
+
+    zoomOverlay?.addEventListener("touchstart", (e) => {
+        if (e.touches.length !== 1) return;
+        zoomTouchStartX = e.touches[0].clientX;
+        zoomTouchStartY = e.touches[0].clientY;
+        zoomTouchMoved = false;
+    }, { passive: true });
+
+    zoomOverlay?.addEventListener("touchmove", (e) => {
+        zoomTouchMoved = true;
+    }, { passive: true });
+
+    zoomOverlay?.addEventListener("touchend", (e) => {
+        if (!zoomTouchMoved) return;
+        if (currentScale > 1) return;
+
+        const touch = e.changedTouches[0];
+        if (!touch) return;
+
+        const dx = touch.clientX - zoomTouchStartX;
+        const dy = touch.clientY - zoomTouchStartY;
+
+        if (Math.abs(dx) > ZOOM_TOUCH_THRESHOLD && Math.abs(dx) > Math.abs(dy)) {
+            if (dx < 0) {
+                requestSwitch(activeIndex + 1);
+            } else {
+                requestSwitch(activeIndex - 1);
+            }
+        }
+    }, { passive: true });
+
     document.addEventListener("keydown", (e) => {
         if (!isZoomOpen()) return;
 
@@ -618,8 +621,8 @@ import "swiper/css/free-mode";
     });
 
     window.addEventListener("resize", () => {
-        if (isZoomOpen() && scale > 1) {
-            applyZoomTransform();
+        if (isZoomOpen() && zoomSwiper) {
+            zoomSwiper.update();
         }
     });
 
@@ -648,7 +651,6 @@ import "swiper/css/free-mode";
     mainImg.addEventListener("touchstart", onPointerDown, { passive: true });
     mainImg.addEventListener("touchend", onPointerUp);
 
-    // --- Init ---
     applyImage(activeIndex);
     updateThumbArrows();
     scheduleBackgroundPreload(activeIndex);

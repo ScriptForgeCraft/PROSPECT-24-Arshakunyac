@@ -75,13 +75,13 @@
 .main-plan-img {
   width: 100%;
   height: min(60svh, 900px);
-  object-fit:cover;
+  object-fit: cover;
   display: block;
   opacity: 1;
   transition: opacity 8s ease;
   will-change: opacity;
   transition: ease-in-out 0.6s;
-   
+
 
   &:hover {
     transform: scale(1.04);
@@ -223,8 +223,8 @@
 .zoom-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.95);
-  backdrop-filter: blur(2px);
+  background: rgba(0, 0, 0, 0.978);
+  backdrop-filter: blur(4px);
   display: none;
   align-items: center;
   justify-content: center;
@@ -288,35 +288,51 @@
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(0, 0, 0, 0.49);
   border: none;
   color: white;
   font-size: 48px;
   width: 60px;
-  height: 10%;
+  height: 100%;
   cursor: pointer;
   transition: all 0.2s;
-  z-index: 10001;
-  backdrop-filter: blur(10px);
+  z-index: 8000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
 
 }
 
+.zoom-arrow span {
+  filter: drop-shadow(0 0 3px rgb(0, 0, 0));
+  padding: 10px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
 
 .zoom-arrow.prev {
-  left: -5px;
-  border-radius: 0 8px 8px 0;
+  left: 0;
+
+  & span {
+    border-radius: 0 8px 8px 0;
+  }
 }
 
 .zoom-arrow.next {
-  right: -5px;
-  border-radius: 8px 0 0 8px;
+  right: 0;
+
+  & span {
+    border-radius: 8px 0 0 8px;
+  }
 }
+
 
 
 .zoom-arrow:active {
   transform: translateX(-1%) translateY(-50%) scale(0.95);
 }
-
 
 
 .zoom-btn {
@@ -335,7 +351,9 @@
   flex-direction: column;
   gap: 8px;
   z-index: 10002;
+
   pointer-events: auto;
+
 }
 
 .zoom-btn-ctrl {
@@ -401,4 +419,28 @@
 
 .swiper-slide {
   flex-shrink: 0;
+}
+
+
+/* =========================
+   SWIPER ZOOM FIXES
+========================= */
+
+
+.zoom-container.swiper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  max-height: 100svh;
+  max-width: 100svw;
+}
+
+.zoom-container .swiper-zoom-container img {
+  padding: 5px 10px;
+  min-height: 70svh;
+  width: auto;
+  max-width: 100%;
+  max-height: 100svh;
+  display: block;
+  user-select: none;
 }
