@@ -80,11 +80,11 @@
   opacity: 1;
   transition: opacity 8s ease;
   will-change: opacity;
-  transition: ease-in-out 0.6s;
+  transition: ease-in-out 0.4s;
 
 
   &:hover {
-    transform: scale(1.04);
+    transform: scale(1.05);
   }
 }
 
@@ -127,12 +127,10 @@
   cursor: pointer;
   border-radius: 6px;
   border: 2px solid rgba(255, 255, 255, 0);
-  filter: grayscale(1);
   transition: filter 0.25s ease, border-color 0.25s ease;
 }
 
 .gallery-strip .thumb.is-active {
-  filter: grayscale(0);
   border-color: var(--accent-gold);
 }
 
@@ -437,7 +435,7 @@
 
 .zoom-container .swiper-zoom-container img {
   padding: 5px 10px;
-  min-height: 70svh;
+  min-height: 0;
   width: auto;
   max-width: 100%;
   max-height: 100svh;

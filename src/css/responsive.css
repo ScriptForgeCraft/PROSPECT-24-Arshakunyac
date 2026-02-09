@@ -192,16 +192,18 @@
   .valuation-content {
     grid-template-columns: 1fr;
     gap: 24px;
+    padding: var(--mobile-padding);
   }
 
   .valuation-images {
     grid-template-columns: 1fr;
+    max-height: 100%;
   }
 
   .valuation-images img {
     border-radius: 6px;
     min-height: 200px;
-    max-height: 50svh;
+    max-height: 30svh;
   }
 }
 
@@ -220,8 +222,16 @@
     width: 50px;
     height: 80px;
     backdrop-filter: none;
-    background-color: rgba(0, 0, 0, 0.249);
+    background-color: rgba(0, 0, 0, 0.923);
     font-size: 34px;
+  }
+
+  .zoom-arrow.next {
+    border-radius: 12px 0 0 12px;
+  }
+
+  .zoom-arrow.prev {
+    border-radius: 0 12px 12px 0;
   }
 
   .zoom-image {
@@ -244,6 +254,7 @@
     bottom: 16px;
     right: 16px;
     gap: 6px;
+    
   }
 
   .zoom-btn-ctrl {
@@ -257,7 +268,7 @@
   }
 
   .zoom-arrow {
-    width: 40px;
+    width: 0px;
     height: 70px;
   }
 
@@ -273,8 +284,9 @@
   }
 
   .zoom-arrow {
-    width: 25px;
+    width: 30px;
     height: 60px;
+    background-color: rgba(0, 0, 0, 0);
   }
 
   .zoom-controls {
@@ -580,6 +592,7 @@
    ============================================ */
 
 @media (prefers-reduced-motion: reduce) {
+
   .modal,
   .modal-content,
   .btn-action,
