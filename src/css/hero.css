@@ -1,7 +1,7 @@
 .hero-section {
   min-height: 60vh;
   padding-top: 5%;
-  background:  url("/images/bg.webp");
+  background: url("/images/bg.webp");
   background-size: contain;
   background-position: right bottom;
   background-repeat: no-repeat;
@@ -24,7 +24,7 @@
 }
 
 .hero-logo {
-  width: 300px;
+  width: 280px;
   height: auto;
   margin: 0 auto 20px;
   filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.05));
@@ -43,14 +43,14 @@
 }
 
 .hero-title {
-  font-size: 2.2rem;
+  font-size: 2rem;
   text-align: center;
   line-height: 1.2;
   width: 100%;
   padding: 0 5vw;
   font-weight: 700;
 
-  background: linear-gradient(135deg, #34445E 0%, #00135e 100%);
+  background: #324561;
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;

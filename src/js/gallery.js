@@ -531,6 +531,17 @@ import "swiper/css/zoom";
     let overlayPointerStart = { x: 0, y: 0 };
     const TAP_THRESHOLD = 10;
 
+    function blockNextClick() {
+        const handler = (e) => {
+            e.stopImmediatePropagation();
+            e.stopPropagation();
+            e.preventDefault();
+            document.removeEventListener("click", handler, true);
+        };
+        document.addEventListener("click", handler, true);
+        setTimeout(() => document.removeEventListener("click", handler, true), 500);
+    }
+
     zoomOverlay?.addEventListener("pointerdown", (e) => {
         overlayPointerStart = { x: e.clientX, y: e.clientY };
     });
@@ -539,18 +550,18 @@ import "swiper/css/zoom";
         const dx = Math.abs(e.clientX - overlayPointerStart.x);
         const dy = Math.abs(e.clientY - overlayPointerStart.y);
 
-
         if (dx < TAP_THRESHOLD && dy < TAP_THRESHOLD) {
-
             const target = e.target;
             const isButton = target.closest('.zoom-in, .zoom-out, .zoom-reset, .zoom-close, .zoom-arrow');
             const isImage = target === zoomImage || target.closest('.swiper-zoom-container img');
 
             if (!isButton && !isImage) {
+                blockNextClick();
                 closeZoom();
             }
         }
     });
+
 
     zoomNext?.addEventListener("click", (e) => { e.stopPropagation(); requestSwitch(activeIndex + 1); });
     zoomPrev?.addEventListener("click", (e) => { e.stopPropagation(); requestSwitch(activeIndex - 1); });
