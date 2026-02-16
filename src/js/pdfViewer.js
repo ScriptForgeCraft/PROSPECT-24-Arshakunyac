@@ -100,89 +100,69 @@ class PDFModal {
             return;
         }
 
-        const isIOS = this.isIOSDevice();
         const fullUrl = this.getFullUrl(this.currentFilePath);
+        const isIOS = this.isIOSDevice();
 
+        // Для iOS - просто открываем в новой вкладке
+        // iOS Safari не поддерживает программное скачивание
         if (isIOS) {
-            // Для iOS - открываем в новой вкладке (iOS не поддерживает прямое скачивание из JavaScript)
-            window.open(fullUrl, '_blank');
-        } else {
-            // Для остальных платформ - пытаемся скачать через fetch
-            this.forceDownload(fullUrl);
+            window.open(fullUrl, '_blank', 'noopener,noreferrer');
+            return;
         }
+
+        // Для Android и Desktop - используем простой download атрибут
+        // Это самый надежный способ
+        const link = document.createElement('a');
+        link.href = fullUrl;
+        link.download = this.getFileName();
+        link.style.display = 'none';
+        
+        document.body.appendChild(link);
+        link.click();
+        
+        // Удаляем ссылку после небольшой задержки
+        setTimeout(() => {
+            document.body.removeChild(link);
+        }, 100);
     }
 
-    async forceDownload(url) {
-        try {
-            // Пробуем скачать через fetch
-            const response = await fetch(url);
-            const blob = await response.blob();
-            
-            // Создаем blob URL
-            const blobUrl = window.URL.createObjectURL(blob);
-            
-            // Создаем временную ссылку для скачивания
-            const link = document.createElement('a');
-            link.href = blobUrl;
-            link.download = this.titleEl.textContent || 'document.pdf';
-            link.style.display = 'none';
-            
-            document.body.appendChild(link);
-            link.click();
-            
-            // Очищаем
-            setTimeout(() => {
-                document.body.removeChild(link);
-                window.URL.revokeObjectURL(blobUrl);
-            }, 100);
-        } catch (error) {
-            console.error('Download via fetch failed:', error);
-            // Fallback - простая ссылка с download атрибутом
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = this.titleEl.textContent || 'document.pdf';
-            link.style.display = 'none';
-            
-            document.body.appendChild(link);
-            link.click();
-            
-            setTimeout(() => {
-                document.body.removeChild(link);
-            }, 100);
+    getFileName() {
+        // Получаем имя файла из title или из пути
+        if (this.titleEl && this.titleEl.textContent) {
+            return this.titleEl.textContent + '.pdf';
         }
+        
+        // Пробуем получить из пути
+        if (this.currentFilePath) {
+            const parts = this.currentFilePath.split('/');
+            const fileName = parts[parts.length - 1];
+            if (fileName && fileName.endsWith('.pdf')) {
+                return fileName;
+            }
+        }
+        
+        return 'document.pdf';
     }
 
     createPDFObject(url) {
-        // Создаем object элемент для отображения PDF
         const obj = document.createElement('object');
         obj.data = url;
         obj.type = 'application/pdf';
         obj.style.width = '100%';
         obj.style.height = '100%';
         
-        // Fallback для браузеров без поддержки встроенного просмотра PDF
         const fallbackText = document.createElement('p');
         fallbackText.style.padding = '20px';
         fallbackText.style.textAlign = 'center';
         fallbackText.innerHTML = `
             Ваш браузер не поддерживает просмотр PDF.<br>
-            <a href="${url}" download style="color: #007bff; text-decoration: underline;">
-                Нажмите здесь, чтобы скачать файл
+            <a href="${url}" target="_blank" style="color: #007bff; text-decoration: underline;">
+                Բացել նոր էջում
             </a>
         `;
         obj.appendChild(fallbackText);
         
         return obj;
-    }
-
-    createEmbedElement(url) {
-        // Альтернативный метод через embed
-        const embed = document.createElement('embed');
-        embed.src = url;
-        embed.type = 'application/pdf';
-        embed.style.width = '100%';
-        embed.style.height = '100%';
-        return embed;
     }
 
     tryFallbackViewer() {
@@ -192,16 +172,13 @@ class PDFModal {
         
         const fullUrl = this.getFullUrl(this.currentFilePath);
         
-        // Очищаем iframe
         this.iframe.style.display = 'none';
         
-        // Удаляем старый object/embed если есть
         const oldObject = this.modalBody.querySelector('object, embed');
         if (oldObject) {
             oldObject.remove();
         }
         
-        // Пробуем object элемент
         const pdfObject = this.createPDFObject(fullUrl);
         this.modalBody.appendChild(pdfObject);
         
@@ -219,17 +196,15 @@ class PDFModal {
             this.currentFilePath = filePath;
             this.showLoading();
 
-            // Очищаем предыдущие object/embed элементы
+            // Очищаем предыдущие элементы
             const oldElements = this.modalBody.querySelectorAll('object, embed');
             oldElements.forEach(el => el.remove());
             
-            // Показываем iframe обратно
             this.iframe.style.display = 'block';
 
             const isGoogleDrive = filePath.includes('drive.google.com');
             const isIOS = this.isIOSDevice();
             const isAndroid = this.isAndroid();
-            const isMobile = this.isMobileDevice();
 
             // Для Google Drive
             if (isGoogleDrive) {
@@ -241,33 +216,18 @@ class PDFModal {
 
             const fullUrl = this.getFullUrl(filePath);
 
-            // Стратегия для iOS
+            // Универсальная стратегия - прямая загрузка для всех
+            this.iframe.src = fullUrl;
+
+            // Дополнительные атрибуты для iOS
             if (isIOS) {
-                // iOS отлично работает с прямой загрузкой PDF в iframe
-                this.iframe.src = fullUrl;
                 this.iframe.setAttribute('allowfullscreen', '');
                 this.iframe.setAttribute('webkitallowfullscreen', '');
                 this.iframe.setAttribute('allow', 'fullscreen');
             }
-            // Стратегия для Android
-            else if (isAndroid) {
-                // Android Chrome тоже хорошо работает с прямой загрузкой
-                this.iframe.src = fullUrl;
-            }
-            // Стратегия для Desktop
-            else {
-                // Для десктопа используем iframe с PDF
-                // Большинство современных браузеров поддерживают это нативно
-                this.iframe.src = fullUrl;
-            }
 
             // Настройка кнопки скачивания
-            if (isIOS) {
-                this.downloadLink.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg> Բացել';
-            } else {
-                this.downloadLink.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg> Ներբեռնել';
-            }
-            this.downloadLink.style.display = 'inline-flex';
+            this.setupDownloadButton(isIOS);
 
             this.showModal();
 
@@ -275,6 +235,20 @@ class PDFModal {
             console.error('Error opening PDF:', error);
             this.handleLoadError();
         }
+    }
+
+    setupDownloadButton(isIOS) {
+        const svgIcon = '<svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>';
+        
+        if (isIOS) {
+            // Для iOS - кнопка "Открыть" (так как скачивание не работает)
+            this.downloadLink.innerHTML = svgIcon + ' Բացել';
+        } else {
+            // Для остальных - кнопка "Скачать"
+            this.downloadLink.innerHTML = svgIcon + ' Ներբեռնել';
+        }
+        
+        this.downloadLink.style.display = 'inline-flex';
     }
 
     close() {
@@ -290,7 +264,6 @@ class PDFModal {
             this.currentFilePath = null;
             this.hideLoading();
             
-            // Удаляем object/embed элементы
             const elements = this.modalBody.querySelectorAll('object, embed');
             elements.forEach(el => el.remove());
             
