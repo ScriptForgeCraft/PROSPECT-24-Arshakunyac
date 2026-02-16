@@ -76,7 +76,6 @@
     letter-spacing: 0.3px;
 }
 
-/* Адаптивность */
 @media (max-width: 768px) {
     .footer {
         padding: 35px 0 0;
