@@ -1,9 +1,97 @@
 .footer {
-    padding: 40px 0;
+    background: #1a1f2e;
+    color: #d1d5db;
+    padding: 50px 0 0;
+    margin-top: 60px;
+    border-top: 2px solid #2d3748;
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px 35px;
+}
+
+.footer-section h4 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #ffffff;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.contact-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 14px;
+    font-size: 14px;
+    line-height: 1.7;
+    color: #dbdbdb;
+}
+
+.contact-item svg {
+    flex-shrink: 0;
+    margin-top: 2px;
+    color: #6b7280;
+}
+
+.contact-copy {
+    cursor: pointer;
+    padding: 6px 10px;
+    margin-left: -10px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.contact-copy:hover {
+
+    color: #ffffff;
+}
+
+.contact-copy:hover svg {
+    color: #93c5fd;
+}
+
+.email-note {
+    font-size: 12px;
+    color: #6b7280;
+    font-style: italic;
+    margin-left: 26px;
+    margin-top: -6px;
+}
+
+.footer-bottom {
+    background: #111827;
+    padding: 18px 0;
     text-align: center;
-    border-top: 1px solid rgba(255,255,255,0.1);
-    color: var(--text-secondary);
-    font-size: 0.8rem;
-    margin-top: 20px;
-    background-color: rgb(0, 0, 0);
+    border-top: 1px solid #2d3748;
+}
+
+.footer-bottom p {
+    margin: 0;
+    font-size: 13px;
+    color: #c1c1c1;
+    letter-spacing: 0.3px;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .footer {
+        padding: 35px 0 0;
+        margin-top: 40px;
+    }
+
+    .footer-content {
+        padding: 0 15px 25px;
+    }
+
+    .footer-section h4 {
+        font-size: 16px;
+    }
+
+    .contact-item {
+        font-size: 13px;
+    }
 }
