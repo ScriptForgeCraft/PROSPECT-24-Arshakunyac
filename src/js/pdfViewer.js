@@ -102,27 +102,45 @@ class PDFModal {
 
         const fullUrl = this.getFullUrl(this.currentFilePath);
         const isIOS = this.isIOSDevice();
+        const isAndroid = this.isAndroid();
 
-        // Для iOS - просто открываем в новой вкладке
-        // iOS Safari не поддерживает программное скачивание
-        if (isIOS) {
+        // Для iOS и Android - открываем в новой вкладке
+        // Они не поддерживают надежное программное скачивание PDF
+        if (isIOS || isAndroid) {
             window.open(fullUrl, '_blank', 'noopener,noreferrer');
             return;
         }
 
-        // Для Android и Desktop - используем простой download атрибут
-        // Это самый надежный способ
-        const link = document.createElement('a');
-        link.href = fullUrl;
-        link.download = this.getFileName();
-        link.style.display = 'none';
+        // Для Desktop - пытаемся скачать
+        this.forceDownloadDesktop(fullUrl);
+    }
+
+    forceDownloadDesktop(url) {
+        // Создаем временный iframe для скачивания
+        const iframe = document.createElement('iframe');
+        iframe.style.display = 'none';
+        iframe.src = url;
         
-        document.body.appendChild(link);
-        link.click();
+        document.body.appendChild(iframe);
         
-        // Удаляем ссылку после небольшой задержки
+        // Удаляем iframe через некоторое время
         setTimeout(() => {
-            document.body.removeChild(link);
+            document.body.removeChild(iframe);
+        }, 2000);
+
+        // Также пробуем через ссылку
+        setTimeout(() => {
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = this.getFileName();
+            link.style.display = 'none';
+            
+            document.body.appendChild(link);
+            link.click();
+            
+            setTimeout(() => {
+                document.body.removeChild(link);
+            }, 100);
         }, 100);
     }
 
@@ -239,12 +257,13 @@ class PDFModal {
 
     setupDownloadButton(isIOS) {
         const svgIcon = '<svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>';
+        const isAndroid = this.isAndroid();
         
-        if (isIOS) {
-            // Для iOS - кнопка "Открыть" (так как скачивание не работает)
+        if (isIOS || isAndroid) {
+            // Для iOS и Android - кнопка "Открыть" (так как скачивание открывает в новой вкладке)
             this.downloadLink.innerHTML = svgIcon + ' Բացել';
         } else {
-            // Для остальных - кнопка "Скачать"
+            // Для Desktop - кнопка "Скачать"
             this.downloadLink.innerHTML = svgIcon + ' Ներբեռնել';
         }
         
