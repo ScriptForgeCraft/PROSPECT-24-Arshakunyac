@@ -104,11 +104,44 @@ class PDFModal {
         const fullUrl = this.getFullUrl(this.currentFilePath);
 
         if (isIOS) {
+            // Для iOS - открываем в новой вкладке (iOS не поддерживает прямое скачивание из JavaScript)
+            window.open(fullUrl, '_blank');
+        } else {
+            // Для остальных платформ - пытаемся скачать через fetch
+            this.forceDownload(fullUrl);
+        }
+    }
+
+    async forceDownload(url) {
+        try {
+            // Пробуем скачать через fetch
+            const response = await fetch(url);
+            const blob = await response.blob();
+            
+            // Создаем blob URL
+            const blobUrl = window.URL.createObjectURL(blob);
+            
+            // Создаем временную ссылку для скачивания
             const link = document.createElement('a');
-            link.href = fullUrl;
-            link.target = '_blank';
-            link.rel = 'noopener noreferrer';
+            link.href = blobUrl;
             link.download = this.titleEl.textContent || 'document.pdf';
+            link.style.display = 'none';
+            
+            document.body.appendChild(link);
+            link.click();
+            
+            // Очищаем
+            setTimeout(() => {
+                document.body.removeChild(link);
+                window.URL.revokeObjectURL(blobUrl);
+            }, 100);
+        } catch (error) {
+            console.error('Download via fetch failed:', error);
+            // Fallback - простая ссылка с download атрибутом
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = this.titleEl.textContent || 'document.pdf';
+            link.style.display = 'none';
             
             document.body.appendChild(link);
             link.click();
@@ -116,13 +149,6 @@ class PDFModal {
             setTimeout(() => {
                 document.body.removeChild(link);
             }, 100);
-        } else {
-            const link = document.createElement('a');
-            link.href = fullUrl;
-            link.download = this.titleEl.textContent || 'document.pdf';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
         }
     }
 
