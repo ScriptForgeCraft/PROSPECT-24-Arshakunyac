@@ -1,5 +1,6 @@
 
 
+
 class PDFModal {
     constructor() {
         this.modal = document.getElementById('pdf-modal');
@@ -24,9 +25,18 @@ class PDFModal {
         return /(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(navigator.userAgent);
     }
 
+    isIOS() {
+        return /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+            (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    }
+
     attachEventListeners() {
         document.querySelectorAll('.btn-close').forEach(btn => {
-            btn.addEventListener('click', () => this.close());
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                this.close();
+            });
         });
         this.modal.addEventListener('click', (e) => {
             if (e.target === this.modal) {
@@ -46,6 +56,7 @@ class PDFModal {
 
             target.addEventListener('click', (event) => {
                 event.stopPropagation();
+                event.preventDefault();
                 const file = target.dataset.file;
                 const title = target.dataset.title;
 
@@ -58,11 +69,29 @@ class PDFModal {
             });
         });
 
+        // iOS: download attribute is not supported, so we handle click manually
         document.querySelectorAll('.doc-download').forEach(link => {
             link.addEventListener('click', (event) => {
                 event.stopPropagation();
+
+                if (this.isIOS()) {
+                    event.preventDefault();
+                    // On iOS, open PDF in new tab — user can save via Share button
+                    window.open(link.href, '_blank');
+                }
             });
         });
+
+        // Handle download button inside modal on iOS
+        if (this.downloadLink) {
+            this.downloadLink.addEventListener('click', (event) => {
+                if (this.isIOS()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    window.open(this.downloadLink.href, '_blank');
+                }
+            });
+        }
 
         this.iframe.addEventListener('load', () => {
             this.hideLoading();
@@ -89,8 +118,14 @@ class PDFModal {
             const isTablet = this.isTabletDevice();
 
             if ((isMobile || isTablet) && !isGoogleDrive) {
-                const fullUrl = this.getFullUrl(filePath);
-                this.iframe.src = `https://mozilla.github.io/pdf.js/web/viewer.html?file=${encodeURIComponent(fullUrl)}`;
+                if (this.isIOS()) {
+                    // iOS Safari has a built-in PDF viewer — load directly
+                    this.iframe.src = filePath;
+                } else {
+                    // Android and other mobile — use Mozilla pdf.js
+                    const fullUrl = this.getFullUrl(filePath);
+                    this.iframe.src = `https://mozilla.github.io/pdf.js/web/viewer.html?file=${encodeURIComponent(fullUrl)}`;
+                }
             } else {
                 this.iframe.src = filePath;
             }
@@ -152,10 +187,14 @@ class PDFModal {
 
         const errorMsg = document.createElement('div');
         errorMsg.className = 'pdf-error-message';
-        errorMsg.innerHTML = `
-        <p>Փաստաթուղթը չի կարողացել բեռնվել</p>
-        <button class="retry-btn" onclick="location.reload()">Կրկին փորձել</button>
-    `;
+        const p = document.createElement('p');
+        p.textContent = '\u0553\u0561\u057d\u057f\u0561\u0569\u0578\u0582\u0572\u0569\u0568 \u0579\u056b \u056f\u0561\u0580\u0578\u0572\u0561\u0581\u0565\u056c \u0562\u0565\u057c\u0576\u057e\u0565\u056c';
+        const btn = document.createElement('button');
+        btn.className = 'retry-btn';
+        btn.textContent = '\u053f\u0580\u056f\u056b\u0576 \u0583\u0578\u0580\u0571\u0565\u056c';
+        btn.onclick = () => location.reload();
+        errorMsg.appendChild(p);
+        errorMsg.appendChild(btn);
         this.modalBody.appendChild(errorMsg);
     }
 
