@@ -443,23 +443,24 @@
 
         <!-- PDF Viewer Modal -->
         <div id="pdf-modal" class="modal">
-
             <div class="modal-content">
                 <div class="modal-header">
                     <h3 id="modal-title">Փաստաթուղթ</h3>
                     <div class="modal-controls">
-                        <a id="download-link" href="" download class="btn-action">Ներբեռնել</a>
+                        <a id="download-link" href="javascript:void(0)" class="btn-action">
+                            <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
+                                <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
+                            </svg>
+                            Ներբեռնել
+                        </a>
 
-                        <button class="btn-close" type="button" aria-label="Փակել"><svg viewBox="0 0 24 24" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                                <g id="SVGRepo_iconCarrier">
-                                    <path fill-rule="evenodd" clip-rule="evenodd"
-                                        d="M8.87 10.5046L10.8204 12.4504L9.76045 13.511L6 9.75456L9.76045 5.99805L10.8204 7.05871L8.87 9.00456H18V18H11.9532V16.5H16.5V10.5046H8.87Z"
-                                        fill="#ffffff"></path>
-                                </g>
-                            </svg></button>
+                        <button class="btn-close" type="button" aria-label="Փակել">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                    d="M8.87 10.5046L10.8204 12.4504L9.76045 13.511L6 9.75456L9.76045 5.99805L10.8204 7.05871L8.87 9.00456H18V18H11.9532V16.5H16.5V10.5046H8.87Z"
+                                    fill="currentColor" />
+                            </svg>
+                        </button>
                     </div>
                 </div>
                 <div class="modal-body">
