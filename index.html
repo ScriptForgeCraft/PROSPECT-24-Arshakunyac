@@ -599,14 +599,13 @@
                 setTimeout(() => {
                     copySpan.textContent = originalText;
                     element.style.color = '';
-                }, 2000);
+                }, 500);
             }).catch(err => {
-                console.error('Ошибка копирования:', err);
+                console.error('Error:', err);
             });
         }
     </script>
 
- 
 </body>
 
 </html>

@@ -69,7 +69,6 @@ class PDFModal {
             });
         });
 
-        // iOS: download attribute is not supported, use Web Share API instead
         document.querySelectorAll('.doc-download').forEach(link => {
             link.addEventListener('click', (event) => {
                 event.stopPropagation();
@@ -82,7 +81,6 @@ class PDFModal {
             });
         });
 
-        // Handle download button inside modal on iOS
         if (this.downloadLink) {
             this.downloadLink.addEventListener('click', (event) => {
                 if (this.isIOS()) {
@@ -120,10 +118,8 @@ class PDFModal {
 
             if ((isMobile || isTablet) && !isGoogleDrive) {
                 if (this.isIOS()) {
-                    // iOS Safari has a built-in PDF viewer — load directly
                     this.iframe.src = filePath;
                 } else {
-                    // Android and other mobile — use Mozilla pdf.js
                     const fullUrl = this.getFullUrl(filePath);
                     this.iframe.src = `https://mozilla.github.io/pdf.js/web/viewer.html?file=${encodeURIComponent(fullUrl)}`;
                 }
@@ -189,10 +185,10 @@ class PDFModal {
         const errorMsg = document.createElement('div');
         errorMsg.className = 'pdf-error-message';
         const p = document.createElement('p');
-        p.textContent = '\u0553\u0561\u057d\u057f\u0561\u0569\u0578\u0582\u0572\u0569\u0568 \u0579\u056b \u056f\u0561\u0580\u0578\u0572\u0561\u0581\u0565\u056c \u0562\u0565\u057c\u0576\u057e\u0565\u056c';
+        p.textContent = "Փաստաթուղթը չի կարողացել բեռնվել";
         const btn = document.createElement('button');
         btn.className = 'retry-btn';
-        btn.textContent = '\u053f\u0580\u056f\u056b\u0576 \u0583\u0578\u0580\u0571\u0565\u056c';
+        btn.textContent = "Կրկին փորձել";
         btn.onclick = () => location.reload();
         errorMsg.appendChild(p);
         errorMsg.appendChild(btn);
@@ -208,12 +204,10 @@ class PDFModal {
             if (navigator.canShare && navigator.canShare({ files: [file] })) {
                 await navigator.share({ files: [file] });
             } else {
-                // Fallback if Share API not available
                 window.open(url, '_blank');
             }
         } catch (error) {
             if (error.name !== 'AbortError') {
-                // AbortError = user cancelled share sheet, not an error
                 window.open(url, '_blank');
             }
         }
