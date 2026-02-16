@@ -7,6 +7,7 @@ class PDFModal {
         this.modalBody = document.querySelector('.modal-body');
 
         this.isOpen = false;
+        this.currentFilePath = null;
         this.init();
     }
 
@@ -67,6 +68,13 @@ class PDFModal {
             });
         });
 
+        // Обработчик для кнопки скачивания
+        this.downloadLink.addEventListener('click', (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            this.downloadPDF();
+        });
+
         this.iframe.addEventListener('load', () => {
             this.hideLoading();
         });
@@ -74,6 +82,29 @@ class PDFModal {
         this.iframe.addEventListener('error', () => {
             this.handleLoadError();
         });
+    }
+
+    downloadPDF() {
+        if (!this.currentFilePath) {
+            console.error('No file to download');
+            return;
+        }
+
+        const isIOS = this.isIOSDevice();
+        const fullUrl = this.getFullUrl(this.currentFilePath);
+
+        if (isIOS) {
+            // Для iOS открываем в новой вкладке
+            window.open(fullUrl, '_blank');
+        } else {
+            // Для остальных устройств - обычное скачивание
+            const link = document.createElement('a');
+            link.href = fullUrl;
+            link.download = this.titleEl.textContent || 'document.pdf';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
     }
 
     open(filePath, title = 'Փաստաթուղթ') {
@@ -84,6 +115,7 @@ class PDFModal {
 
         try {
             this.titleEl.textContent = title;
+            this.currentFilePath = filePath;
             this.showLoading();
 
             const isGoogleDrive = filePath.includes('drive.google.com');
@@ -94,7 +126,6 @@ class PDFModal {
             // Для iOS - используем PDF.js
             if (isIOS && !isGoogleDrive) {
                 const fullUrl = this.getFullUrl(filePath);
-                // Используем PDF.js для iOS
                 this.iframe.src = `https://mozilla.github.io/pdf.js/web/viewer.html?file=${encodeURIComponent(fullUrl)}`;
                 
                 // Для iOS добавляем атрибуты для лучшей совместимости
@@ -115,8 +146,12 @@ class PDFModal {
             if (isGoogleDrive) {
                 this.downloadLink.style.display = 'none';
             } else {
-                this.downloadLink.href = filePath;
-                this.downloadLink.download = title || 'document.pdf';
+                // Меняем текст кнопки для iOS
+                if (isIOS) {
+                    this.downloadLink.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg> Բացել';
+                } else {
+                    this.downloadLink.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg> Ներբեռնել';
+                }
                 this.downloadLink.style.display = 'inline-flex';
             }
 
@@ -136,6 +171,7 @@ class PDFModal {
             this.modal.style.display = 'none';
             this.iframe.src = '';
             this.isOpen = false;
+            this.currentFilePath = null;
             this.hideLoading();
             
             // Удаляем сообщение об ошибке если есть
