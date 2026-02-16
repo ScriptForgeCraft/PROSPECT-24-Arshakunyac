@@ -69,15 +69,15 @@ class PDFModal {
             });
         });
 
-        // iOS: download attribute is not supported, so we handle click manually
+        // iOS: download attribute is not supported, use Web Share API instead
         document.querySelectorAll('.doc-download').forEach(link => {
             link.addEventListener('click', (event) => {
                 event.stopPropagation();
 
                 if (this.isIOS()) {
                     event.preventDefault();
-                    // On iOS, open PDF in new tab — user can save via Share button
-                    window.open(link.href, '_blank');
+                    const filename = link.getAttribute('download') || this.getFilenameFromUrl(link.href);
+                    this.downloadFileIOS(link.href, filename);
                 }
             });
         });
@@ -88,7 +88,8 @@ class PDFModal {
                 if (this.isIOS()) {
                     event.preventDefault();
                     event.stopPropagation();
-                    window.open(this.downloadLink.href, '_blank');
+                    const filename = this.getFilenameFromUrl(this.downloadLink.href);
+                    this.downloadFileIOS(this.downloadLink.href, filename);
                 }
             });
         }
@@ -196,6 +197,35 @@ class PDFModal {
         errorMsg.appendChild(p);
         errorMsg.appendChild(btn);
         this.modalBody.appendChild(errorMsg);
+    }
+
+    async downloadFileIOS(url, filename) {
+        try {
+            const response = await fetch(url);
+            const blob = await response.blob();
+            const file = new File([blob], filename, { type: blob.type || 'application/pdf' });
+
+            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                await navigator.share({ files: [file] });
+            } else {
+                // Fallback if Share API not available
+                window.open(url, '_blank');
+            }
+        } catch (error) {
+            if (error.name !== 'AbortError') {
+                // AbortError = user cancelled share sheet, not an error
+                window.open(url, '_blank');
+            }
+        }
+    }
+
+    getFilenameFromUrl(url) {
+        try {
+            const path = new URL(url, window.location.origin).pathname;
+            return decodeURIComponent(path.split('/').pop()) || 'document.pdf';
+        } catch {
+            return 'document.pdf';
+        }
     }
 
     getFullUrl(path) {
