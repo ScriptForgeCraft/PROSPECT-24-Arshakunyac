@@ -401,7 +401,10 @@
                         <p class="currency">ՀՀ դրամ</p>
                     </div>
                     <div class="doc-row">
-                        <div class="doc-item" data-file="./files/Prospect24_Mamul.pdf" data-title="Բիզնես հաշվարկ">
+                        <div class="doc-item" data-files='[
+        {"file": "./files/Prospect24_Mamul.pdf", "title": "Prospect24_Mamul.pdf"},
+        {"file": "./files/ՆԵՐԴՐՈՒՄԱՅԻՆ ԾՐԱԳԻՐ.pdf", "title": "ՆԵՐԴՐՈՒՄԱՅԻՆ ԾՐԱԳԻՐ"}
+    ]' data-title="Բիզնես հաշվարկ">
                             <span>Բիզնես հաշվարկ</span>
                             <a class="doc-download" href="./files/Բիզնես հաշվարկ.zip" download
                                 aria-label="Ներբեռնել PDF փաստաթուղթ 12">
@@ -417,7 +420,8 @@
                         </div>
                     </div>
                     <div class="doc-row">
-                        <div class="doc-item" data-file="./files/Երևան Կենտրոն Արշակունյաց պողոտա 4.pdf" data-title="Գնահատում">
+                        <div class="doc-item" data-file="./files/Երևան Կենտրոն Արշակունյաց պողոտա 4.pdf"
+                            data-title="Գնահատում">
                             <span>Գնահատում</span>
                             <a class="doc-download" href="./files/Երևան Կենտրոն Արշակունյաց պողոտա 4.pdf" download
                                 aria-label="Ներբեռնել PDF փաստաթուղթ 12">
@@ -442,10 +446,12 @@
             </div>
         </section>
 
+
         <!-- PDF Viewer Modal -->
         <div id="pdf-modal" class="modal">
 
             <div class="modal-content">
+
                 <div class="modal-header">
                     <h3 id="modal-title">Փաստաթուղթ</h3>
                     <div class="modal-controls">
@@ -463,12 +469,12 @@
                             </svg></button>
                     </div>
                 </div>
+                <div class="modal-tabs" id="modal-tabs" style="display:none;"></div>
                 <div class="modal-body">
                     <iframe id="pdf-frame"></iframe>
                 </div>
             </div>
         </div>
-
 
         <!-- Zoom Overlay -->
         <div class="zoom-overlay" id="zoomOverlay" aria-hidden="true">
