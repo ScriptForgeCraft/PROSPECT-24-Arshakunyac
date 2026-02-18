@@ -1,6 +1,3 @@
-
-
-
 class PDFModal {
     constructor() {
         this.modal = document.getElementById('pdf-modal');
@@ -51,21 +48,30 @@ class PDFModal {
         });
 
         document.querySelectorAll('.doc-item').forEach(item => {
-            const btn = item.querySelector('button');
-            const target = btn || item;
+            item.addEventListener('click', (event) => {
+                if (event.target.closest('.doc-download')) return;
 
-            target.addEventListener('click', (event) => {
                 event.stopPropagation();
                 event.preventDefault();
-                const file = target.dataset.file;
-                const title = target.dataset.title;
 
-                if (!file) {
+                const button = item.querySelector('button[data-file]');
+
+                const dataFiles = button?.dataset.files || item.dataset.files;
+                const dataFile = button?.dataset.file || item.dataset.file;
+                const dataTitle = button?.dataset.title || item.dataset.title || 'Փաստաթուղթ';
+
+                if (dataFiles) {
+                    try {
+                        const files = JSON.parse(dataFiles);
+                        this.openMultiple(files, dataTitle);
+                    } catch (e) {
+                        console.error('Error parsing data-files:', e);
+                    }
+                } else if (dataFile) {
+                    this.open(dataFile, dataTitle);
+                } else {
                     console.warn('No file path provided');
-                    return;
                 }
-
-                this.open(file, title);
             });
         });
 
@@ -100,16 +106,14 @@ class PDFModal {
         });
     }
 
-    open(filePath, title = 'Փաստաթուղթ') {
+    open(filePath, title = 'Փաuтаθugth') {
         if (!filePath) {
             console.error('File path is required');
             return;
         }
 
         try {
-
             this.titleEl.textContent = title;
-
             this.showLoading();
 
             const isGoogleDrive = filePath.includes('drive.google.com');
@@ -118,13 +122,13 @@ class PDFModal {
 
             if ((isMobile || isTablet) && !isGoogleDrive) {
                 if (this.isIOS()) {
-                    this.iframe.src = filePath;
+                    this.iframe.src = encodeURI(filePath); // ← encodeURI
                 } else {
                     const fullUrl = this.getFullUrl(filePath);
                     this.iframe.src = `https://mozilla.github.io/pdf.js/web/viewer.html?file=${encodeURIComponent(fullUrl)}`;
                 }
             } else {
-                this.iframe.src = filePath;
+                this.iframe.src = encodeURI(filePath); // ← encodeURI
             }
 
             if (isGoogleDrive) {
@@ -142,6 +146,64 @@ class PDFModal {
         }
     }
 
+    loadFile(filePath) {
+        this.showLoading();
+
+        const existingError = this.modalBody.querySelector('.pdf-error-message');
+        if (existingError) existingError.remove();
+
+        const isGoogleDrive = filePath.includes('drive.google.com');
+        const isMobile = this.isMobileDevice();
+        const isTablet = this.isTabletDevice();
+
+        if ((isMobile || isTablet) && !isGoogleDrive) {
+            if (this.isIOS()) {
+                this.iframe.src = encodeURI(filePath); // ← encodeURI
+            } else {
+                const fullUrl = this.getFullUrl(filePath);
+                this.iframe.src = `https://mozilla.github.io/pdf.js/web/viewer.html?file=${encodeURIComponent(fullUrl)}`;
+            }
+        } else {
+            this.iframe.src = encodeURI(filePath); // ← encodeURI
+        }
+
+        if (isGoogleDrive) {
+            this.downloadLink.style.display = 'none';
+        } else {
+            this.downloadLink.href = filePath;
+            this.downloadLink.style.display = 'inline-flex';
+        }
+    }
+
+    openMultiple(files, groupTitle = 'Փաuтаθugth') {
+        if (!files || files.length === 0) return;
+
+        this.titleEl.textContent = groupTitle;
+
+        const tabsEl = document.getElementById('modal-tabs');
+
+        if (files.length > 1 && tabsEl) {
+            tabsEl.style.display = 'flex';
+            tabsEl.innerHTML = '';
+
+            files.forEach((f, i) => {
+                const tab = document.createElement('button');
+                tab.className = 'modal-tab' + (i === 0 ? ' active' : '');
+                tab.textContent = f.title || `Փաuтаθugth ${i + 1}`;
+                tab.addEventListener('click', () => {
+                    tabsEl.querySelectorAll('.modal-tab').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    this.loadFile(f.file);
+                });
+                tabsEl.appendChild(tab);
+            });
+        } else if (tabsEl) {
+            tabsEl.style.display = 'none';
+        }
+
+        this.open(files[0].file, groupTitle);
+    }
+
     close() {
         this.modal.classList.remove('active');
         document.body.style.overflow = 'auto';
@@ -150,6 +212,12 @@ class PDFModal {
             this.iframe.src = '';
             this.isOpen = false;
             this.hideLoading();
+
+            const tabsEl = document.getElementById('modal-tabs');
+            if (tabsEl) {
+                tabsEl.style.display = 'none';
+                tabsEl.innerHTML = '';
+            }
         }, 300);
     }
 
@@ -185,10 +253,10 @@ class PDFModal {
         const errorMsg = document.createElement('div');
         errorMsg.className = 'pdf-error-message';
         const p = document.createElement('p');
-        p.textContent = "Փաստաթուղթը չի կարողացել բեռնվել";
+        p.textContent = "Փաuтаθugth չի կароղацел բеռнвел";
         const btn = document.createElement('button');
         btn.className = 'retry-btn';
-        btn.textContent = "Կրկին փորձել";
+        btn.textContent = "Կрկin փорձел";
         btn.onclick = () => location.reload();
         errorMsg.appendChild(p);
         errorMsg.appendChild(btn);
@@ -239,14 +307,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
 window.viewPDF = (filePath, title) => {
     if (pdfModal) {
-
         pdfModal.open(filePath, title);
     }
 };
 
 window.closeModal = () => {
     if (pdfModal) {
-
         pdfModal.close();
     }
 };
