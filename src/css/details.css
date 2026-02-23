@@ -120,6 +120,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+
   padding: 8px;
   border-radius: 6px;
   cursor: pointer;
@@ -131,7 +132,7 @@
   &:hover {
     background: rgba(255, 255, 255, 0.08);
     border-color: var(--accent-hover);
-    box-shadow: 0 4px 0 0 #1b2d65;
+    box-shadow: 0 4px 0 0 #13255a;
     color: white;
   }
 }
@@ -247,4 +248,30 @@
   border-radius: 0 6px 6px 0;
   padding: 5px 0;
   padding-left: 10px;
+}
+
+
+
+
+
+
+@keyframes colorSweep {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.75;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+.doc-row svg.loading {
+  background-color: rgba(10, 2, 97, 0.363);
+  color: rgb(220, 220, 220);
+  opacity: 1;
+  animation: colorSweep 1.2s ease-in-out infinite;
 }

@@ -12,6 +12,12 @@ class PDFModal {
 
     init() {
         this.attachEventListeners();
+        const row = document.querySelector('.doc-row-all');
+        if (row) {
+            row.querySelector('svg')?.addEventListener('click', () => {
+                row.querySelector('.btn-download-all')?.click();
+            });
+        }
     }
 
     isMobileDevice() {
@@ -78,7 +84,9 @@ class PDFModal {
         document.querySelectorAll('.doc-download').forEach(link => {
             link.addEventListener('click', (event) => {
                 event.stopPropagation();
-
+                const loadingSvg = link.querySelector('svg');
+                loadingSvg.classList.add('loading');
+                setTimeout(() => loadingSvg.classList.remove('loading'), 500);
                 if (this.isIOS()) {
                     event.preventDefault();
                     const filename = link.getAttribute('download') || this.getFilenameFromUrl(link.href);
@@ -329,3 +337,4 @@ function debounce(func, wait) {
         timeout = setTimeout(later, wait);
     };
 }
+
