@@ -76,7 +76,7 @@ body.dark-mode {
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: -3px 4px 14px var(--toggle-shadow);
+  box-shadow: -3px 0 14px var(--toggle-shadow);
   transition: background 0.25s ease,
     box-shadow 0.25s ease,
     transform 0.2s ease;

@@ -254,7 +254,7 @@
     bottom: 16px;
     right: 16px;
     gap: 6px;
-    
+
   }
 
   .zoom-btn-ctrl {
@@ -673,4 +673,64 @@
 .retry-btn:focus-visible {
   outline: 3px solid rgba(255, 255, 255, 0.6);
   outline-offset: 2px;
+}
+
+
+/* ============================================
+      FOOTER
+   ============================================ */
+@media (max-width: 768px) {
+  .footer-content {
+    grid-template-columns: 1fr 1fr;
+    gap: 36px;
+    padding: 32px 20px;
+  }
+
+  .contact-group {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .footer-links li a {
+    padding: 6px 0;
+    font-size: 0.85rem;
+  }
+
+  .footer-bottom {
+    padding: 16px 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer-content {
+    grid-template-columns: 1fr;
+    gap: 36px;
+    padding: 32px 20px;
+    justify-items: left;
+  }
+
+  .footer-section h4 {
+    font-size: 0.8rem;
+  }
+
+  .contact-icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  .contact-value {
+    font-size: 0.75rem;
+  }
+
+  .social-btn {
+    width: 40px;
+    height: 40px;
+  }
+
+  .toast {
+    width: 90%;
+    text-align: center;
+    white-space: normal;
+    font-size: 12px;
+  }
 }
