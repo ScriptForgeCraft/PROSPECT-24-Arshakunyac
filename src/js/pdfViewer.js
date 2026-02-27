@@ -114,7 +114,7 @@ class PDFModal {
         });
     }
 
-    open(filePath, title = 'Փաuтаθugth') {
+    open(filePath, title = 'Փաստաթուղթ') {
         if (!filePath) {
             console.error('File path is required');
             return;
@@ -130,21 +130,35 @@ class PDFModal {
 
             if ((isMobile || isTablet) && !isGoogleDrive) {
                 if (this.isIOS()) {
-                    this.iframe.src = encodeURI(filePath); // ← encodeURI
+                    this.iframe.src = encodeURI(filePath);
                 } else {
                     const fullUrl = this.getFullUrl(filePath);
                     this.iframe.src = `https://mozilla.github.io/pdf.js/web/viewer.html?file=${encodeURIComponent(fullUrl)}`;
                 }
             } else {
-                this.iframe.src = encodeURI(filePath); // ← encodeURI
+                this.iframe.src = encodeURI(filePath);
             }
 
+
             if (isGoogleDrive) {
-                this.downloadLink.style.display = 'none';
+                const previewUrl = filePath;
+
+                const match = previewUrl.match(/\/d\/([a-zA-Z0-9_-]+)/);
+
+                if (match) {
+                    const fileId = match[1];
+                    const downloadUrl = `https://drive.usercontent.google.com/u/0/uc?id=${fileId}&export=download`;
+                    this.downloadLink.href = downloadUrl;
+
+                } else {
+                    console.log("Не удалось найти ID файла");
+                    return;
+                }
+
             } else {
                 this.downloadLink.href = filePath;
-                this.downloadLink.style.display = 'inline-flex';
             }
+            this.downloadLink.style.display = 'inline-flex';
 
             this.showModal();
 
@@ -166,13 +180,13 @@ class PDFModal {
 
         if ((isMobile || isTablet) && !isGoogleDrive) {
             if (this.isIOS()) {
-                this.iframe.src = encodeURI(filePath); // ← encodeURI
+                this.iframe.src = encodeURI(filePath);
             } else {
                 const fullUrl = this.getFullUrl(filePath);
                 this.iframe.src = `https://mozilla.github.io/pdf.js/web/viewer.html?file=${encodeURIComponent(fullUrl)}`;
             }
         } else {
-            this.iframe.src = encodeURI(filePath); // ← encodeURI
+            this.iframe.src = encodeURI(filePath);
         }
 
         if (isGoogleDrive) {
@@ -183,7 +197,7 @@ class PDFModal {
         }
     }
 
-    openMultiple(files, groupTitle = 'Փաuтаθugth') {
+    openMultiple(files, groupTitle = 'Փաստաթուղթ') {
         if (!files || files.length === 0) return;
 
         this.titleEl.textContent = groupTitle;
@@ -197,7 +211,7 @@ class PDFModal {
             files.forEach((f, i) => {
                 const tab = document.createElement('button');
                 tab.className = 'modal-tab' + (i === 0 ? ' active' : '');
-                tab.textContent = f.title || `Փաuтаθugth ${i + 1}`;
+                tab.textContent = f.title || `Փաստաթուղթ ${i + 1}`;
                 tab.addEventListener('click', () => {
                     tabsEl.querySelectorAll('.modal-tab').forEach(t => t.classList.remove('active'));
                     tab.classList.add('active');
@@ -261,10 +275,10 @@ class PDFModal {
         const errorMsg = document.createElement('div');
         errorMsg.className = 'pdf-error-message';
         const p = document.createElement('p');
-        p.textContent = "Փաuтаθugth չի կароղацел բеռнвел";
+        p.textContent = "Փաստաթուղթը չհաջողվեց բեռնել։";
         const btn = document.createElement('button');
         btn.className = 'retry-btn';
-        btn.textContent = "Կрկin փорձел";
+        btn.textContent = "Խնդրում ենք նորից փորձեք։";
         btn.onclick = () => location.reload();
         errorMsg.appendChild(p);
         errorMsg.appendChild(btn);
