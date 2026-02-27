@@ -3,6 +3,10 @@ html {
   scrollbar-width: thin;
 }
 
+img {
+  user-select: none;
+}
+
 #hero {
   outline: 4px solid #ffffff;
   outline-offset: -4px;
