@@ -111,14 +111,15 @@
 .mobile-menu {
   position: fixed;
   top: -100%;
-  right: 0;
+  right: 2%;
   max-width: 360px;
   background: #141834;
   padding: 4rem 1rem 1rem;
-  border-left: 1px solid rgba(203, 180, 136, 0.2);
-  transition: top 0.35s ease;
+  border: 1px solid rgb(255, 255, 255);
+  border-top: 2px solid rgb(255, 255, 255);
+  transition: all 0.35s ease;
   z-index: 2400;
-  border-radius: 0 0 0 9px;
+  border-radius: 9px;
   opacity: 0;
 }
 
