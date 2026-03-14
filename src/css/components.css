@@ -243,6 +243,24 @@
   justify-content: center;
 }
 
+.zoom-counter {
+  position: absolute;
+  top: 15px;
+  left: 20px;
+  color: white;
+  font-size: .8rem;
+  font-weight: bold;
+  z-index: 10002;
+  text-shadow: 
+    -1px -1px 0 #000,  
+     1px -1px 0 #000,
+    -1px  1px 0 #000,
+     1px  1px 0 #000;
+  pointer-events: none;
+  font-family: inherit;
+  letter-spacing: 1px;
+}
+
 .zoom-image {
   padding: 0 20px;
   min-height: 70svh;

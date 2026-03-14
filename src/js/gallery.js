@@ -10,7 +10,8 @@ import "swiper/css/zoom";
     if (!mainImg) return;
 
     const thumbs = Array.from(document.querySelectorAll(".thumb"));
-    if (!thumbs.length) return;
+    const valuationThumbs = Array.from(document.querySelectorAll(".valuation-thumb"));
+    if (!thumbs.length && !valuationThumbs.length) return;
 
     const btnThumbPrev = document.querySelector(".gallery-arrow.prev");
     const btnThumbNext = document.querySelector(".gallery-arrow.next");
@@ -63,6 +64,44 @@ import "swiper/css/zoom";
     const preloadedSet = new Set();
 
     let zoomSwiper = null;
+
+    let currentZoomContext = "main"; // "main" or "valuation"
+    let zoomValuationIndex = 0;
+
+    function updateZoomCounter() {
+        const counterEl = document.getElementById("zoomCounter");
+        if (!counterEl) return;
+        if (currentZoomContext === "main") {
+             counterEl.textContent = `${activeIndex + 1} / ${thumbs.length || 1}`;
+        } else if (currentZoomContext === "valuation") {
+             counterEl.textContent = `${zoomValuationIndex + 1} / ${valuationThumbs.length}`;
+        }
+    }
+
+    function handleZoomNext() {
+        if (currentZoomContext === "main") {
+            requestSwitch(activeIndex + 1);
+        } else if (currentZoomContext === "valuation") {
+            navigateValuation(zoomValuationIndex + 1);
+        }
+    }
+
+    function handleZoomPrev() {
+        if (currentZoomContext === "main") {
+            requestSwitch(activeIndex - 1);
+        } else if (currentZoomContext === "valuation") {
+            navigateValuation(zoomValuationIndex - 1);
+        }
+    }
+
+    function navigateValuation(index) {
+        if (!valuationThumbs.length) return;
+        zoomValuationIndex = (index + valuationThumbs.length) % valuationThumbs.length;
+        const largeSrc = valuationThumbs[zoomValuationIndex].dataset.large || valuationThumbs[zoomValuationIndex].src;
+        if (zoomImage) zoomImage.src = largeSrc;
+        resetZoomTransform();
+        updateZoomCounter();
+    }
 
     function preloadImage(src) {
         if (!src || preloadedSet.has(src)) return;
@@ -270,10 +309,28 @@ import "swiper/css/zoom";
         updateZoomButtons();
     }
 
-    function openZoom() {
+    function openZoom(context = "main", startIndex = 0) {
         if (!zoomOverlay || !zoomImage) return;
-        const largeSrc = thumbs[activeIndex]?.dataset.large || mainImg.dataset.large || mainImg.src;
-        zoomImage.src = largeSrc;
+        
+        currentZoomContext = context;
+        let largeSrc = "";
+
+        if (context === "main") {
+            largeSrc = thumbs[activeIndex]?.dataset.large || mainImg?.dataset.large || mainImg?.src;
+            const counterEl = document.getElementById("zoomCounter");
+            if (counterEl) {
+                 counterEl.style.display = thumbs.length ? "block" : "none";
+            }
+        } else if (context === "valuation") {
+            zoomValuationIndex = startIndex;
+            largeSrc = valuationThumbs[zoomValuationIndex]?.dataset.large || valuationThumbs[zoomValuationIndex]?.src;
+            const counterEl = document.getElementById("zoomCounter");
+            if (counterEl) counterEl.style.display = "block";
+        }
+
+        if (largeSrc) zoomImage.src = largeSrc;
+        updateZoomCounter();
+
         zoomOverlay.classList.add("is-open");
         zoomOverlay.setAttribute("aria-hidden", "false");
         document.body.style.overflow = "hidden";
@@ -310,12 +367,13 @@ import "swiper/css/zoom";
         mainImg.src = fullSrc;
         mainImg.dataset.large = thumbs[index]?.dataset.large || fullSrc;
 
-        if (isZoomOpen() && zoomImage) {
+        if (isZoomOpen() && zoomImage && currentZoomContext === "main") {
             const largeSrc = thumbs[index]?.dataset.large || fullSrc;
             zoomImage.src = largeSrc;
 
 
             resetZoomTransform();
+            updateZoomCounter();
         }
 
         setActiveThumb(index);
@@ -492,9 +550,9 @@ import "swiper/css/zoom";
 
         if (currentScale <= 1 && zoomSwipeAxis === 'x' && Math.abs(dragDistX) >= ZOOM_SWIPE_THRESHOLD) {
             if (dragDistX < 0) {
-                requestSwitch(activeIndex + 1);
+                handleZoomNext();
             } else {
-                requestSwitch(activeIndex - 1);
+                handleZoomPrev();
             }
         }
 
@@ -521,8 +579,14 @@ import "swiper/css/zoom";
     btnThumbNext?.addEventListener("click", () => { swiper.slideNext(); updateThumbArrows(); });
     btnThumbPrev?.addEventListener("click", () => { swiper.slidePrev(); updateThumbArrows(); });
 
-    zoomBtn?.addEventListener("click", (e) => { e.preventDefault(); e.stopPropagation(); openZoom(); });
+    zoomBtn?.addEventListener("click", (e) => { e.preventDefault(); e.stopPropagation(); openZoom("main", activeIndex); });
     zoomClose?.addEventListener("click", closeZoom);
+    
+    valuationThumbs.forEach((vThumb, idx) => {
+        vThumb.addEventListener("click", (e) => {
+             e.preventDefault(); e.stopPropagation(); openZoom("valuation", idx);
+        });
+    });
 
     zoomInBtn?.addEventListener("click", (e) => { e.preventDefault(); e.stopPropagation(); zoomIn(); });
     zoomOutBtn?.addEventListener("click", (e) => { e.preventDefault(); e.stopPropagation(); zoomOut(); });
@@ -563,8 +627,8 @@ import "swiper/css/zoom";
     });
 
 
-    zoomNext?.addEventListener("click", (e) => { e.stopPropagation(); requestSwitch(activeIndex + 1); });
-    zoomPrev?.addEventListener("click", (e) => { e.stopPropagation(); requestSwitch(activeIndex - 1); });
+    zoomNext?.addEventListener("click", (e) => { e.stopPropagation(); handleZoomNext(); });
+    zoomPrev?.addEventListener("click", (e) => { e.stopPropagation(); handleZoomPrev(); });
 
 
     if (zoomContainer) {
@@ -600,9 +664,9 @@ import "swiper/css/zoom";
 
         if (Math.abs(dx) > ZOOM_TOUCH_THRESHOLD && Math.abs(dx) > Math.abs(dy)) {
             if (dx < 0) {
-                requestSwitch(activeIndex + 1);
+                handleZoomNext();
             } else {
-                requestSwitch(activeIndex - 1);
+                handleZoomPrev();
             }
         }
     }, { passive: true });
@@ -615,10 +679,10 @@ import "swiper/css/zoom";
                 closeZoom();
                 break;
             case "ArrowRight":
-                requestSwitch(activeIndex + 1);
+                handleZoomNext();
                 break;
             case "ArrowLeft":
-                requestSwitch(activeIndex - 1);
+                handleZoomPrev();
                 break;
             case "+":
             case "=":

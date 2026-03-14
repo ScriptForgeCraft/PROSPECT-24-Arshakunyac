@@ -417,8 +417,7 @@
                         </div>
                     </div>
                     <div class="doc-row">
-                        <div class="doc-item" data-file="./files/Արշակունյաց  4.pdf"
-                            data-title="Գնահատում">
+                        <div class="doc-item" data-file="./files/Արշակունյաց  4.pdf" data-title="Գնահատում">
                             <span>Գնահատում</span>
                             <a class="doc-download" href="./files/Արշակունյաց  4.pdf" download
                                 aria-label="Ներբեռնել PDF փաստաթուղթ 12">
@@ -435,10 +434,12 @@
                     </div>
                 </div>
                 <div class="valuation-images">
-                    <img src="/images/valuation/left.webp" alt="ձախ պատկեր" loading="lazy" decoding="async" width="800"
-                        height="600">
-                    <img src="/images/valuation/right.webp" alt="աջ պատկեր" loading="lazy" decoding="async" width="800"
-                        height="600">
+                    <img class="valuation-thumb" src="/images/valuation/left.webp"
+                        data-large="/images/valuation/full/left.webp" alt="ձախ պատկեր" loading="lazy" decoding="async"
+                        width="800" height="600" style="cursor: pointer;">
+                    <img class="valuation-thumb" src="/images/valuation/right.webp"
+                        data-large="/images/valuation/full/right.webp" alt="աջ պատկեր" loading="lazy" decoding="async"
+                        width="800" height="600" style="cursor: pointer;">
                 </div>
             </div>
         </section>
@@ -472,10 +473,10 @@
                 </div>
             </div>
         </div>
-
         <!-- Zoom Overlay -->
         <div class="zoom-overlay" id="zoomOverlay" aria-hidden="true">
             <div class="zoom-container">
+                <div class="zoom-counter" id="zoomCounter"></div>
                 <button class="zoom-close" type="button" aria-label="Փակել">✕</button>
                 <img class="zoom-image" id="zoomImage" alt="դիտում" width="1400" height="1200" />
                 <button class="zoom-arrow prev" type="button" aria-label="Նախորդ"><span>‹</span></button>
@@ -510,7 +511,6 @@
                 </div>
             </div>
         </div>
-
 
 
     </main>
