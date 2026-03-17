@@ -158,6 +158,8 @@ import "swiper/css/zoom";
         spaceBetween: 12,
         speed: 400,
         grabCursor: true,
+        centeredSlides: true,
+        centeredSlidesBounds: true,
         freeMode: {
             enabled: true,
             sticky: false,
@@ -166,11 +168,10 @@ import "swiper/css/zoom";
         breakpoints: {
             0: { slidesPerView: 2.5 },
             768: { slidesPerView: 5 },
-        },
-        on: {
-            slideChange: updateThumbArrows
         }
     });
+
+    swiper.on('slideChange', updateThumbArrows);
 
     function setActiveThumb(index) {
         thumbs.forEach(t => t.classList.remove("is-active"));
@@ -379,8 +380,7 @@ import "swiper/css/zoom";
         setActiveThumb(index);
         preloadNeighbors(index);
 
-        const isLoopJump = (prevIndex === thumbs.length - 1 && index === 0) || (prevIndex === 0 && index === thumbs.length - 1);
-        isLoopJump ? swiper.slideTo(index, 0, false) : swiper.slideTo(index, 300);
+        swiper.slideTo(index, 300);
 
         updateThumbArrows();
     }
