@@ -72,9 +72,9 @@ import "swiper/css/zoom";
         const counterEl = document.getElementById("zoomCounter");
         if (!counterEl) return;
         if (currentZoomContext === "main") {
-             counterEl.textContent = `${activeIndex + 1} / ${thumbs.length || 1}`;
+            counterEl.textContent = `${activeIndex + 1} / ${thumbs.length || 1}`;
         } else if (currentZoomContext === "valuation") {
-             counterEl.textContent = `${zoomValuationIndex + 1} / ${valuationThumbs.length}`;
+            counterEl.textContent = `${zoomValuationIndex + 1} / ${valuationThumbs.length}`;
         }
     }
 
@@ -166,8 +166,17 @@ import "swiper/css/zoom";
             momentum: true,
         },
         breakpoints: {
-            0: { slidesPerView: 2.5 },
-            768: { slidesPerView: 5 },
+            0: {
+                slidesPerView: 2.5,
+                centeredSlides: false,
+                centeredSlidesBounds: false
+            },
+            768: {
+                slidesPerView: 5,
+                centeredSlides: true,
+                centeredSlidesBounds: true
+            }
+
         }
     });
 
@@ -312,7 +321,7 @@ import "swiper/css/zoom";
 
     function openZoom(context = "main", startIndex = 0) {
         if (!zoomOverlay || !zoomImage) return;
-        
+
         currentZoomContext = context;
         let largeSrc = "";
 
@@ -320,7 +329,7 @@ import "swiper/css/zoom";
             largeSrc = thumbs[activeIndex]?.dataset.large || mainImg?.dataset.large || mainImg?.src;
             const counterEl = document.getElementById("zoomCounter");
             if (counterEl) {
-                 counterEl.style.display = thumbs.length ? "block" : "none";
+                counterEl.style.display = thumbs.length ? "block" : "none";
             }
         } else if (context === "valuation") {
             zoomValuationIndex = startIndex;
@@ -581,10 +590,10 @@ import "swiper/css/zoom";
 
     zoomBtn?.addEventListener("click", (e) => { e.preventDefault(); e.stopPropagation(); openZoom("main", activeIndex); });
     zoomClose?.addEventListener("click", closeZoom);
-    
+
     valuationThumbs.forEach((vThumb, idx) => {
         vThumb.addEventListener("click", (e) => {
-             e.preventDefault(); e.stopPropagation(); openZoom("valuation", idx);
+            e.preventDefault(); e.stopPropagation(); openZoom("valuation", idx);
         });
     });
 
