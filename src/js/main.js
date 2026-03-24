@@ -2,6 +2,7 @@ import "./navigation/scroll-effects.js";
 import "./navigation/mobileMenu.js";
 import "./gallery.js";
 import "./pdfViewer.js";
+import "./download.js"
 import "./settings.js";
 import "./copy.js";
 

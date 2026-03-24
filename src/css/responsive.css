@@ -151,21 +151,34 @@
    ============================================ */
 
 @media (max-width: 1080px) {
+  #details {
+    display: grid;
+    gap: 1rem;
+    padding-bottom: 1rem;
+  }
+
   .split-view {
-    grid-template-columns: 1fr;
-    padding: var(--mobile-padding);
+    display: contents;
+  }
+
+  .text-content {
+    order: 1;
+    padding: 0 var(--mobile-padding);
+  }
+
+  .split-view-footer {
+    order: 2;
+    display: block;
+    padding: 0 var(--mobile-padding);
+  }
+
+  #documents {
+    order: 3;
+    margin: 0 var(--mobile-padding);
   }
 
   .block {
     width: 100%;
-
-
-  }
-}
-
-@media (max-width: 900px) {
-  .split-view {
-    grid-template-columns: 1fr;
   }
 }
 
@@ -180,13 +193,6 @@
 
   .size-block ul {
     grid-template-columns: 1fr;
-  }
-
-  .block {
-    & ul {
-      grid-template-columns: 1fr;
-    }
-
   }
 }
 

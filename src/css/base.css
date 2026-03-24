@@ -38,7 +38,7 @@ body {
   background-color: #E6E6E6;
   color: var(--text-primary);
   font-family: var(--font-main);
-  overflow-x: hidden;
+  overflow-x: clip;
   background-image: url("/images/home_news_vector.png");
   background-size: cover;
   background-attachment: fixed;
@@ -51,7 +51,7 @@ body {
   width: min(1500px, 90%);
   margin: 0 auto;
   margin-top: 50px;
-  overflow: hidden;
+  overflow: clip;
 }
 
 .header-block {

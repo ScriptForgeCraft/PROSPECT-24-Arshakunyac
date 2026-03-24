@@ -6,6 +6,14 @@
   display: grid;
   grid-template-columns: 1fr 400px;
   padding: var(--desktop-padding);
+  padding-bottom: 2rem;
+  gap: 4rem;
+}
+
+.split-view-footer {
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  padding: 0 var(--desktop-padding) var(--desktop-padding);
   gap: 4rem;
 }
 
@@ -104,6 +112,9 @@
   height: min-content;
   border-radius: 8px;
   overflow: hidden;
+  position: sticky;
+  top: 120px;
+  align-self: start;
 }
 
 .document-content .document-header,
