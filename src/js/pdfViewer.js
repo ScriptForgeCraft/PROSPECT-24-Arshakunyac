@@ -107,15 +107,27 @@ class PDFModal {
         iframe.tabIndex = -1;
         iframe.loading = "lazy";
         
-        // Exact styling as #pdf-frame so Excel displays correctly
         iframe.style.width = "100%";
         iframe.style.height = "100%";
-        iframe.style.background = "#ffffff";
+        iframe.style.background = "#1E1E1E";
         iframe.style.border = "none";
-        iframe.style.display = "none";
+        
+        iframe.style.position = "absolute";
+        iframe.style.visibility = "hidden";
+        iframe.style.top = "-9999px";
+        iframe.style.left = "-9999px";
         
         iframe.dataset.preloadUrl = url;
-        iframe.addEventListener("load", () => this.hideLoading());
+        iframe.dataset.isLoaded = "false";
+        
+        iframe.addEventListener("load", () => {
+          iframe.dataset.isLoaded = "true";
+          // If this iframe is currently active, hide the loading spinner
+          if (iframe.style.visibility === "visible" && this.isOpen) {
+            // Small arbitrary delay just in case Office Viewer still paints white
+            setTimeout(() => this.hideLoading(), 500);
+          }
+        });
         iframe.addEventListener("error", () => this.handleLoadError());
         
         this.modalBody.appendChild(iframe);
@@ -220,7 +232,12 @@ class PDFModal {
 
       // Reset DOM displays
       this.iframe.style.display = "block";
-      this.modalBody.querySelectorAll("iframe[data-preload-url]").forEach(ifr => ifr.style.display = "none");
+      this.modalBody.querySelectorAll("iframe[data-preload-url]").forEach(ifr => {
+        ifr.style.position = "absolute";
+        ifr.style.visibility = "hidden";
+        ifr.style.top = "-9999px";
+        ifr.style.left = "-9999px";
+      });
 
       if (this.isOneDriveUrl(filePath)) {
         this.downloadLink.href = "./files/investment-calculation.xlsx";
@@ -230,8 +247,14 @@ class PDFModal {
         const preloadedIframe = this.modalBody.querySelector(`iframe[data-preload-url="${filePath}"]`);
         if (preloadedIframe) {
           this.iframe.style.display = "none";
-          preloadedIframe.style.display = "block";
-          this.hideLoading();
+          preloadedIframe.style.position = "relative";
+          preloadedIframe.style.visibility = "visible";
+          preloadedIframe.style.top = "0";
+          preloadedIframe.style.left = "0";
+
+          if (preloadedIframe.dataset.isLoaded === "true") {
+            setTimeout(() => this.hideLoading(), 500);
+          }
         } else {
           this.iframe.src = filePath;
         }
@@ -249,8 +272,14 @@ class PDFModal {
         const preloadedIframe = this.modalBody.querySelector(`iframe[data-preload-url="${targetUrl}"]`);
         if (preloadedIframe) {
           this.iframe.style.display = "none";
-          preloadedIframe.style.display = "block";
-          this.hideLoading();
+          preloadedIframe.style.position = "relative";
+          preloadedIframe.style.visibility = "visible";
+          preloadedIframe.style.top = "0";
+          preloadedIframe.style.left = "0";
+
+          if (preloadedIframe.dataset.isLoaded === "true") {
+            setTimeout(() => this.hideLoading(), 500);
+          }
         } else {
           this.iframe.src = targetUrl;
         }
@@ -306,7 +335,12 @@ class PDFModal {
     if (existingError) existingError.remove();
 
     this.iframe.style.display = "block";
-    this.modalBody.querySelectorAll("iframe[data-preload-url]").forEach(ifr => ifr.style.display = "none");
+    this.modalBody.querySelectorAll("iframe[data-preload-url]").forEach(ifr => {
+      ifr.style.position = "absolute";
+      ifr.style.visibility = "hidden";
+      ifr.style.top = "-9999px";
+      ifr.style.left = "-9999px";
+    });
 
     // ─── NEW: OneDrive embed ─────────────────────────────────────────────────
     if (this.isOneDriveUrl(filePath)) {
@@ -317,8 +351,14 @@ class PDFModal {
       const preloadedIframe = this.modalBody.querySelector(`iframe[data-preload-url="${filePath}"]`);
       if (preloadedIframe) {
         this.iframe.style.display = "none";
-        preloadedIframe.style.display = "block";
-        this.hideLoading();
+        preloadedIframe.style.position = "relative";
+        preloadedIframe.style.visibility = "visible";
+        preloadedIframe.style.top = "0";
+        preloadedIframe.style.left = "0";
+
+        if (preloadedIframe.dataset.isLoaded === "true") {
+          setTimeout(() => this.hideLoading(), 500);
+        }
       } else {
         this.iframe.src = filePath;
       }
@@ -335,8 +375,14 @@ class PDFModal {
       const preloadedIframe = this.modalBody.querySelector(`iframe[data-preload-url="${targetUrl}"]`);
       if (preloadedIframe) {
         this.iframe.style.display = "none";
-        preloadedIframe.style.display = "block";
-        this.hideLoading();
+        preloadedIframe.style.position = "relative";
+        preloadedIframe.style.visibility = "visible";
+        preloadedIframe.style.top = "0";
+        preloadedIframe.style.left = "0";
+
+        if (preloadedIframe.dataset.isLoaded === "true") {
+          setTimeout(() => this.hideLoading(), 500);
+        }
       } else {
         this.iframe.src = targetUrl;
       }
