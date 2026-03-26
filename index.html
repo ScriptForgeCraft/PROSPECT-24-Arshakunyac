@@ -10,8 +10,23 @@
     <link rel="preload" as="image" href="/images/full/0.webp" fetchpriority="high">
     <link rel="preload" as="image" href="/images/bg.webp" fetchpriority="high">
 
-    <link rel="stylesheet" href="/src/css/main.css">
+    <!-- ===== OPEN GRAPH ===== -->
+    <meta property="og:title" content="ԱՐՇԱԿՈՒՆՅԱՑ | ՔԱՂԱՔ ԵՐԵՎԱՆ, ԱՐՇԱԿՈՒՆՅԱՑ ՊՈՂՈՏԱ, 4 «ՄԱՄՈՒԼԻ ՇԵՆՔ»" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://arshakunyats.pages.dev/" />
+    <meta property="og:image" content="https://arshakunyats.pages.dev/images/preview.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
 
+    <!-- ===== TWITTER ===== -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="ԱՐՇԱԿՈՒՆՅԱՑ | ՔԱՂԱՔ ԵՐԵՎԱՆ, ԱՐՇԱԿՈՒՆՅԱՑ ՊՈՂՈՏԱ, 4 «ՄԱՄՈՒԼԻ ՇԵՆՔ»" />
+    <meta name="twitter:description" content="" />
+    <meta name="twitter:image" content="https://arshakunyats.pages.dev/images/preview.jpg" />
+    <meta property="og:description" content="" />
+    <meta name="twitter:description" content="" />
+
+    <link rel="stylesheet" href="/src/css/main.css">
     <script type="module" src="/src/js/main.js" defer></script>
 </head>
 
@@ -363,7 +378,7 @@
 
                     <div class="doc-row-all-download">
                         <div class="doc-row doc-row-all">
-                            <a href="https://drive.google.com/uc?id=10WAB7lu8m56uVAJb1Y7xG4uKYAs0yiKi&export=download"
+                            <a href="https://drive.google.com/uc?id=1fcESF-RVbQnVTs4clndYsCF65X4SuId6&export=download"
                                 download class="btn-download-all smart-download" aria-label="Ներբեռնել բոլորը"
                                 target="_blank" data-name="Arshakunyats_all_documents.zip">
                                 Ներբեռնել բոլորը
@@ -449,6 +464,7 @@
         </section>
 
 
+
         <!-- PDF Viewer Modal -->
         <div id="pdf-modal" class="modal">
 
@@ -457,8 +473,28 @@
                 <div class="modal-header">
                     <h3 id="modal-title">Փաստաթուղթ</h3>
                     <div class="modal-controls">
-                        <a id="download-link" href="" download class="btn-action">Ներբեռնել</a>
 
+
+                        <!-- Fullscreen Toggle -->
+                        <button class="doc-btn fullscreen-toggle" type="button" aria-label="Fullscreen"
+                            title="Ամբողջ էկրանով">
+                            <!-- expand -->
+                            <svg class="icon-expand" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path
+                                    d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3">
+                                </path>
+                            </svg>
+                            <!-- collapse -->
+                            <svg class="icon-collapse" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path
+                                    d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3">
+                                </path>
+                            </svg>
+                        </button>
+
+                        <a id="download-link" href="" download class="btn-action">Ներբեռնել</a>
                         <button class="btn-close" type="button" aria-label="Փակել"><svg viewBox="0 0 24 24" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
                                 <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -469,6 +505,8 @@
                                         fill="#ffffff"></path>
                                 </g>
                             </svg></button>
+
+
                     </div>
                 </div>
                 <div class="modal-tabs" id="modal-tabs" style="display:none;"></div>
@@ -477,6 +515,8 @@
                 </div>
             </div>
         </div>
+
+
         <!-- Zoom Overlay -->
         <div class="zoom-overlay" id="zoomOverlay" aria-hidden="true">
             <div class="zoom-container">

@@ -1,9 +1,17 @@
+User-agent: facebookexternalhit
+Allow: /images/preview.jpg
+Allow: /images/preview.png
+Disallow: 
+
+User-agent: WhatsApp
+Allow: /images/preview.jpg
+Allow: /images/preview.png
+Disallow: 
+
 User-agent: *
 Allow: /
-
 Disallow: /images/
 Disallow: /files/
-
 Disallow: /*.webp$
 Disallow: /*.png$
 Disallow: /*.jpg$
