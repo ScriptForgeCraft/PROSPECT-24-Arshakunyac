@@ -266,9 +266,27 @@
   .gallery-strip {
     grid-template-columns: repeat(2, 1fr);
   }
+
+
+
+  .btn-download-alt {
+    margin-bottom: 20px;
+  }
+
+  #documents {
+    scroll-margin-top: 14vh;
+  }
+
+  #valuation {
+    scroll-margin-top: 10vh;
+  }
 }
 
 @media (max-width: 768px) {
+  #components {
+    scroll-margin-top: 16vh;
+  }
+
   .zoom-controls {
     bottom: 16px;
     right: 16px;
