@@ -63,6 +63,11 @@ import "swiper/css/zoom";
 
     const preloadedSet = new Set();
 
+    function isMobileDevice() {
+        return window.innerWidth < 960 ||
+            /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    }
+
     let zoomSwiper = null;
 
     let currentZoomContext = "main"; // "main" or "valuation"
@@ -371,14 +376,17 @@ import "swiper/css/zoom";
         const prevIndex = activeIndex;
         activeIndex = index;
 
-        const fullSrc = thumbs[index]?.dataset.full || thumbs[index]?.src;
-        if (!fullSrc) return;
+        // On mobile use the small thumb; on desktop use the medium "full" image
+        const mainSrc = isMobileDevice()
+            ? (thumbs[index]?.src || thumbs[index]?.dataset.full)
+            : (thumbs[index]?.dataset.full || thumbs[index]?.src);
+        if (!mainSrc) return;
 
-        mainImg.src = fullSrc;
-        mainImg.dataset.large = thumbs[index]?.dataset.large || fullSrc;
+        mainImg.src = mainSrc;
+        mainImg.dataset.large = thumbs[index]?.dataset.large || mainSrc;
 
         if (isZoomOpen() && zoomImage && currentZoomContext === "main") {
-            const largeSrc = thumbs[index]?.dataset.large || fullSrc;
+            const largeSrc = thumbs[index]?.dataset.large || mainSrc;
             zoomImage.src = largeSrc;
 
 
