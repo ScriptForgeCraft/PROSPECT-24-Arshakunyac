@@ -1,7 +1,10 @@
-/docs/*
-  Cache-Control: public, max-age=2592000
-  
 /files/*
+  Cache-Control: public, max-age=2592000
+  Access-Control-Allow-Origin: *
+  Access-Control-Allow-Methods: GET
+  Access-Control-Expose-Headers: Content-Length, Content-Type
+
+/docs/*
   Cache-Control: public, max-age=2592000
 
 /images/*
@@ -10,11 +13,8 @@
 /fonts/*
   Cache-Control: public, max-age=31536000
 
-/src/*
+/assets/*
   Cache-Control: public, max-age=604800
 
 /*.html
   Cache-Control: no-cache
-
-/assets/*
-  Cache-Control: public, max-age=604800
