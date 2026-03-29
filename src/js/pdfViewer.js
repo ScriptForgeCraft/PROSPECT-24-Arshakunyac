@@ -240,7 +240,6 @@ class PDFModal {
 
     try {
       this.titleEl.textContent = title;
-      this.showLoading();
       // Reset DOM displays
       this.iframe.style.display = "block";
       this.modalBody.querySelectorAll("iframe[data-preload-url]").forEach(ifr => {
@@ -263,10 +262,11 @@ class PDFModal {
           preloadedIframe.style.top = "0";
           preloadedIframe.style.left = "0";
 
-          if (preloadedIframe.dataset.isLoaded === "true") {
-            setTimeout(() => this.hideLoading(), 500);
+          if (preloadedIframe.dataset.isLoaded !== "true") {
+            this.showLoading();
           }
         } else {
+          this.showLoading();
           this.iframe.src = filePath;
         }
 
@@ -288,10 +288,11 @@ class PDFModal {
           preloadedIframe.style.top = "0";
           preloadedIframe.style.left = "0";
 
-          if (preloadedIframe.dataset.isLoaded === "true") {
-            setTimeout(() => this.hideLoading(), 500);
+          if (preloadedIframe.dataset.isLoaded !== "true") {
+            this.showLoading();
           }
         } else {
+          this.showLoading();
           this.iframe.src = targetUrl;
         }
 
@@ -300,6 +301,7 @@ class PDFModal {
       }
       // ────────────────────────────────────────────────────────────────────────
 
+      this.showLoading();
       const isGoogleDrive = filePath.includes("drive.google.com");
       const isMobile = this.isMobileDevice();
       const isTablet = this.isTabletDevice();
@@ -340,7 +342,6 @@ class PDFModal {
   }
 
   loadFile(filePath) {
-    this.showLoading();
     const existingError = this.modalBody.querySelector(".pdf-error-message");
     if (existingError) existingError.remove();
 
@@ -366,10 +367,11 @@ class PDFModal {
         preloadedIframe.style.top = "0";
         preloadedIframe.style.left = "0";
 
-        if (preloadedIframe.dataset.isLoaded === "true") {
-          setTimeout(() => this.hideLoading(), 500);
+        if (preloadedIframe.dataset.isLoaded !== "true") {
+          this.showLoading();
         }
       } else {
+        this.showLoading();
         this.iframe.src = filePath;
       }
       return;
@@ -390,10 +392,11 @@ class PDFModal {
         preloadedIframe.style.top = "0";
         preloadedIframe.style.left = "0";
 
-        if (preloadedIframe.dataset.isLoaded === "true") {
-          setTimeout(() => this.hideLoading(), 500);
+        if (preloadedIframe.dataset.isLoaded !== "true") {
+          this.showLoading();
         }
       } else {
+        this.showLoading();
         this.iframe.src = targetUrl;
       }
       return;
@@ -401,6 +404,7 @@ class PDFModal {
     // ────────────────────────────────────────────────────────────────────────
 
 
+    this.showLoading();
     const isGoogleDrive = filePath.includes("drive.google.com");
     const isMobile = this.isMobileDevice();
     const isTablet = this.isTabletDevice();
