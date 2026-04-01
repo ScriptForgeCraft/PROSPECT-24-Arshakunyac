@@ -12,12 +12,6 @@ class PDFModal {
 
   init() {
     this.attachEventListeners();
-    const row = document.querySelector(".doc-row-all");
-    if (row) {
-      row.querySelector("svg")?.addEventListener("click", () => {
-        row.querySelector(".btn-download-all")?.click();
-      });
-    }
 
     // Preload Office/OneDrive viewers after main page load to speed up opening
     window.addEventListener("load", () => {
@@ -32,7 +26,7 @@ class PDFModal {
       navigator.userAgent,
     );
   }
- 
+
   isTabletDevice() {
     return /(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(
       navigator.userAgent,
@@ -566,27 +560,3 @@ let pdfModal;
 document.addEventListener("DOMContentLoaded", () => {
   pdfModal = new PDFModal();
 });
-
-window.viewPDF = (filePath, title) => {
-  if (pdfModal) {
-    pdfModal.open(filePath, title);
-  }
-};
-
-window.closeModal = () => {
-  if (pdfModal) {
-    pdfModal.close();
-  }
-};
-
-function debounce(func, wait) {
-  let timeout;
-  return function executedFunction(...args) {
-    const later = () => {
-      clearTimeout(timeout);
-      func(...args);
-    };
-    clearTimeout(timeout);
-    timeout = setTimeout(later, wait);
-  };
-}

@@ -183,6 +183,17 @@
 }
 
 @media (max-width: 600px) {
+  .block {
+    gap: 0;
+    padding: 10px;
+
+    & ul {
+
+      grid-template-columns: 1fr;
+
+    }
+  }
+
   .doc-item::after {
     content: none;
   }
@@ -266,8 +277,6 @@
   .gallery-strip {
     grid-template-columns: repeat(2, 1fr);
   }
-
-
 
   .btn-download-alt {
     margin-bottom: 20px;
